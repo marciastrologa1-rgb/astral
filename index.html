@@ -587,10 +587,14 @@ function renderFormClientes() {
   var sel = document.getElementById('f-cliente');
   sel.innerHTML = state.clientes.length ? state.clientes.map(function(c){ return '<option value="'+c.id+'">'+c.nome+'</option>'; }).join('') : '<option>-- Nenhum cliente --</option>';
   if (state.clienteAtivo) sel.value = state.clienteAtivo.id;
-  var today = new Date();
-  document.getElementById('f-dia').value = String(today.getDate()).padStart(2,'0');
-  document.getElementById('f-mes').value = String(today.getMonth()+1).padStart(2,'0');
-  document.getElementById('f-ano').value = today.getFullYear();
+  // Só redefine a data se não houver valor selecionado ainda
+  var anoEl = document.getElementById('f-ano');
+  if (!anoEl.value || !anoEl.options[anoEl.selectedIndex]) {
+    var today = new Date();
+    document.getElementById('f-dia').value = String(today.getDate()).padStart(2,'0');
+    document.getElementById('f-mes').value = String(today.getMonth()+1).padStart(2,'0');
+    anoEl.value = today.getFullYear();
+  }
   document.getElementById('f-polaridade').value = '';
   ['pos','neg','neu'].forEach(function(c){ document.getElementById('pol-'+c).classList.remove('pos','neg','neu'); });
   document.getElementById('ia-sugestao-box').style.display = 'none';
@@ -839,7 +843,7 @@ function formatDate(d) { if (!d) return ''; var p = d.split('-'); return p[2]+'/
 
 // INIT
 populateDias('f-dia'); populateDias('nc-dia');
-populateAnos('f-ano', 2020, 2030); populateAnos('nc-ano', 1940, 2010);
+populateAnos('f-ano', 2020, 2035); populateAnos('nc-ano', 1940, 2010);
 var today = new Date();
 document.getElementById('f-dia').value = String(today.getDate()).padStart(2,'0');
 document.getElementById('f-mes').value = String(today.getMonth()+1).padStart(2,'0');

@@ -86,7 +86,7 @@ textarea{resize:vertical;min-height:90px;line-height:1.6}
 .section-card{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:22px;margin-bottom:16px}
 .client-card{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:18px;transition:all .2s}
 .client-card:hover{border-color:var(--accent);transform:translateY(-2px)}
-.client-card h3{font-family:'Cormorant Garamond',serif;font-size:17px;font-weight:300;margin-bottom:4px;color:var(--soft)}
+.client-card h3{font-family:'Cormorant Garamond',serif;font-size:17px;font-weight:300;margin-bottom:4px;color:var(--soft);cursor:pointer}
 .client-card p{font-size:12px;color:var(--muted)}
 .clients-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:14px}
 .badge{display:inline-block;padding:2px 8px;border-radius:20px;font-size:11px;background:#EEEbF8;color:#5B4A9A;margin-top:6px}
@@ -139,7 +139,7 @@ textarea{resize:vertical;min-height:90px;line-height:1.6}
 .events-list{background:var(--surface);border:1px solid var(--border);border-radius:12px;overflow:hidden}
 .events-list-header{padding:14px 18px;border-bottom:1px solid var(--border)}
 .events-list-header h3{font-family:'Cormorant Garamond',serif;font-size:16px;font-weight:300;color:var(--soft)}
-.event-row{padding:12px 18px;border-bottom:1px solid #F0EDE6;display:grid;grid-template-columns:80px 1fr 110px 60px 70px 80px;gap:8px;align-items:center;font-size:12px}
+.event-row{padding:12px 18px;border-bottom:1px solid #F0EDE6;display:grid;grid-template-columns:80px 1fr 110px 60px 70px 90px;gap:8px;align-items:center;font-size:12px}
 .event-row:hover{background:#FAFAF7}.event-row:last-child{border-bottom:none}
 .event-row.pos{border-left:3px solid var(--pos)}.event-row.neg{border-left:3px solid var(--neg)}.event-row.neu{border-left:3px solid var(--neu)}
 .event-date{color:var(--gold);font-weight:500}
@@ -160,18 +160,13 @@ textarea{resize:vertical;min-height:90px;line-height:1.6}
 .api-key-bar label{font-size:11px;color:var(--gold);font-weight:600;white-space:nowrap;text-transform:uppercase;letter-spacing:1px}
 .api-key-bar input{flex:1;min-width:200px;font-size:12px;border-color:var(--gold)}
 .api-key-bar .btn{font-size:12px;padding:7px 14px}
-/* Busca de clientes */
 .search-bar{position:relative;margin-bottom:16px}
-.search-bar input{padding-left:32px;background:#F9F7F2}
-.search-bar::before{content:"\1F50D";position:absolute;left:10px;top:50%;transform:translateY(-50%);font-size:14px;z-index:1}
-/* Notificacao */
+.search-bar input{padding-left:10px;background:#F9F7F2}
 .notif{position:fixed;bottom:24px;right:24px;background:#2C2416;color:#fff;padding:12px 20px;border-radius:10px;font-size:13px;z-index:999;opacity:0;transition:opacity .3s;pointer-events:none;max-width:280px}
 .notif.show{opacity:1}
-.notif.success{background:#1A6B3A}
-.notif.error{background:#B82020}
-/* Card de cliente com acoes */
+.notif.verde{background:#1A6B3A}
+.notif.vermelho{background:#B82020}
 .client-card-actions{display:flex;gap:6px;margin-top:10px;padding-top:10px;border-top:1px solid var(--border)}
-/* Aba dados */
 .dados-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px}
 .dados-card{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:24px}
 .dados-card h3{font-family:'Cormorant Garamond',serif;font-size:18px;font-weight:300;color:var(--soft);margin-bottom:8px}
@@ -194,10 +189,8 @@ textarea{resize:vertical;min-height:90px;line-height:1.6}
 <div class="client-list" id="client-list"></div>
 <button class="btn-new-client" onclick="openNewClientModal()">+ Novo cliente</button>
 </aside>
-
 <main class="main">
 
-<!-- CALENDARIO -->
 <div class="view active" id="view-calendario">
 <div class="topbar">
 <div><h2>Calendario Astral</h2><p id="cal-client-name" style="color:var(--muted);font-size:13px">Selecione um cliente na barra lateral</p></div>
@@ -222,8 +215,7 @@ textarea{resize:vertical;min-height:90px;line-height:1.6}
 <div class="cal-day-label">QUA</div><div class="cal-day-label">QUI</div><div class="cal-day-label">SEX</div><div class="cal-day-label">SAB</div>
 </div>
 <div class="ai-panel" id="ai-panel" style="display:none">
-<h3>Texto gerado pela IA</h3>
-<p class="subtitle">Edite livremente antes de copiar</p>
+<h3>Texto gerado pela IA</h3><p class="subtitle">Edite livremente antes de copiar</p>
 <div id="ai-output"></div>
 <div class="ai-actions">
 <button class="btn btn-ghost" onclick="copiarTexto()">Copiar texto</button>
@@ -232,64 +224,40 @@ textarea{resize:vertical;min-height:90px;line-height:1.6}
 </div>
 </div>
 
-<!-- CLIENTES -->
 <div class="view" id="view-clientes">
 <div class="topbar"><div><h2>Clientes</h2><p>Gerencie seus clientes</p></div><button class="btn btn-primary" onclick="openNewClientModal()">+ Novo cliente</button></div>
 <div class="search-bar"><input type="text" id="busca-cliente" placeholder="Buscar cliente por nome..." oninput="renderClientes()"></div>
 <div class="clients-grid" id="clients-grid"></div>
 </div>
 
-<!-- CADASTRO -->
 <div class="view" id="view-cadastro">
 <div class="topbar"><div><h2 id="cadastro-title">Cadastrar Evento</h2><p id="cadastro-subtitle">Adicionar novo evento ao calendario</p></div></div>
 <div class="section-card">
 <div class="form-grid">
 <div class="form-group"><label>Cliente</label><select id="f-cliente"></select></div>
-<div class="form-group"><label>Data do Evento</label><input type="date" id="f-data" style="padding:9px 11px;font-size:14px"></div>
+<div class="form-group"><label>Data do Evento</label><input type="date" id="f-data"></div>
 <div class="form-group"><label>Tipo de Evento</label>
-<select id="f-tipo">
-<option>Transito</option><option>Direcao Direta</option><option>Direcao Converse</option>
-<option>Direcao Primaria</option><option>Revolucao Solar</option><option>Eclipse</option>
-<option>Firdaria</option><option>Profeccao</option><option>Ano Pessoal</option>
-</select></div>
+<select id="f-tipo"><option>Transito</option><option>Direcao Direta</option><option>Direcao Converse</option><option>Direcao Primaria</option><option>Revolucao Solar</option><option>Eclipse</option><option>Firdaria</option><option>Profeccao</option><option>Ano Pessoal</option></select></div>
 <div class="form-group"><label>Fase</label>
-<select id="f-fase"><option value="">--</option><option>Positivo F4</option><option>Positivo F3</option><option>Positivo F2</option><option>Positivo F1</option><option>Negativo F1</option><option>Negativo F2</option><option>Negativo F3</option><option>Negativo F4</option></select>
+<select id="f-fase"><option value="">--</option><option>Positivo F4</option><option>Positivo F3</option><option>Positivo F2</option><option>Positivo F1</option><option>Negativo F1</option><option>Negativo F2</option><option>Negativo F3</option><option>Negativo F4</option></select></div>
 </div>
 </div>
-</div>
-
-<div class="planet-block">
-<div class="planet-block-title">Planeta 1</div>
+<div class="planet-block"><div class="planet-block-title">Planeta 1</div>
 <div class="form-grid-3">
-<div class="form-group"><label>Planeta</label>
-<select id="f-planeta1"><option value="">--</option><option>Sol</option><option>Lua</option><option>Mercurio</option><option>Venus</option><option>Marte</option><option>Jupiter</option><option>Saturno</option><option>Urano</option><option>Netuno</option><option>Plutao</option><option>ASC</option><option>MC</option></select></div>
-<div class="form-group"><label>Rege a Casa</label>
-<select id="f-p1-rege"><option value="">--</option><option>Casa I</option><option>Casa II</option><option>Casa III</option><option>Casa IV</option><option>Casa V</option><option>Casa VI</option><option>Casa VII</option><option>Casa VIII</option><option>Casa IX</option><option>Casa X</option><option>Casa XI</option><option>Casa XII</option></select></div>
-<div class="form-group"><label>Esta na Casa</label>
-<select id="f-p1-casa"><option value="">--</option><option>Casa I</option><option>Casa II</option><option>Casa III</option><option>Casa IV</option><option>Casa V</option><option>Casa VI</option><option>Casa VII</option><option>Casa VIII</option><option>Casa IX</option><option>Casa X</option><option>Casa XI</option><option>Casa XII</option></select></div>
-</div>
-</div>
-
-<div class="aspecto-row">
-<label>Aspecto</label>
-<select id="f-aspecto"><option value="">--</option><option>Conjuncao (0)</option><option>Sextil (60)</option><option>Quadratura (90)</option><option>Trigono (120)</option><option>Oposicao (180)</option><option>Quincuncio (150)</option><option>Semi-sextil (30)</option><option>Semiquadratura (45)</option><option>Sesquiquadratura (135)</option></select>
-</div>
-
-<div class="planet-block">
-<div class="planet-block-title">Planeta 2</div>
+<div class="form-group"><label>Planeta</label><select id="f-planeta1"><option value="">--</option><option>Sol</option><option>Lua</option><option>Mercurio</option><option>Venus</option><option>Marte</option><option>Jupiter</option><option>Saturno</option><option>Urano</option><option>Netuno</option><option>Plutao</option><option>ASC</option><option>MC</option></select></div>
+<div class="form-group"><label>Rege a Casa</label><select id="f-p1-rege"><option value="">--</option><option>Casa I</option><option>Casa II</option><option>Casa III</option><option>Casa IV</option><option>Casa V</option><option>Casa VI</option><option>Casa VII</option><option>Casa VIII</option><option>Casa IX</option><option>Casa X</option><option>Casa XI</option><option>Casa XII</option></select></div>
+<div class="form-group"><label>Esta na Casa</label><select id="f-p1-casa"><option value="">--</option><option>Casa I</option><option>Casa II</option><option>Casa III</option><option>Casa IV</option><option>Casa V</option><option>Casa VI</option><option>Casa VII</option><option>Casa VIII</option><option>Casa IX</option><option>Casa X</option><option>Casa XI</option><option>Casa XII</option></select></div>
+</div></div>
+<div class="aspecto-row"><label>Aspecto</label>
+<select id="f-aspecto"><option value="">--</option><option>Conjuncao (0)</option><option>Sextil (60)</option><option>Quadratura (90)</option><option>Trigono (120)</option><option>Oposicao (180)</option><option>Quincuncio (150)</option><option>Semi-sextil (30)</option><option>Semiquadratura (45)</option><option>Sesquiquadratura (135)</option></select></div>
+<div class="planet-block"><div class="planet-block-title">Planeta 2</div>
 <div class="form-grid-3">
-<div class="form-group"><label>Planeta</label>
-<select id="f-planeta2"><option value="">--</option><option>Sol</option><option>Lua</option><option>Mercurio</option><option>Venus</option><option>Marte</option><option>Jupiter</option><option>Saturno</option><option>Urano</option><option>Netuno</option><option>Plutao</option><option>ASC</option><option>MC</option></select></div>
-<div class="form-group"><label>Rege a Casa</label>
-<select id="f-p2-rege"><option value="">--</option><option>Casa I</option><option>Casa II</option><option>Casa III</option><option>Casa IV</option><option>Casa V</option><option>Casa VI</option><option>Casa VII</option><option>Casa VIII</option><option>Casa IX</option><option>Casa X</option><option>Casa XI</option><option>Casa XII</option></select></div>
-<div class="form-group"><label>Esta na Casa</label>
-<select id="f-p2-casa"><option value="">--</option><option>Casa I</option><option>Casa II</option><option>Casa III</option><option>Casa IV</option><option>Casa V</option><option>Casa VI</option><option>Casa VII</option><option>Casa VIII</option><option>Casa IX</option><option>Casa X</option><option>Casa XI</option><option>Casa XII</option></select></div>
-</div>
-</div>
-
+<div class="form-group"><label>Planeta</label><select id="f-planeta2"><option value="">--</option><option>Sol</option><option>Lua</option><option>Mercurio</option><option>Venus</option><option>Marte</option><option>Jupiter</option><option>Saturno</option><option>Urano</option><option>Netuno</option><option>Plutao</option><option>ASC</option><option>MC</option></select></div>
+<div class="form-group"><label>Rege a Casa</label><select id="f-p2-rege"><option value="">--</option><option>Casa I</option><option>Casa II</option><option>Casa III</option><option>Casa IV</option><option>Casa V</option><option>Casa VI</option><option>Casa VII</option><option>Casa VIII</option><option>Casa IX</option><option>Casa X</option><option>Casa XI</option><option>Casa XII</option></select></div>
+<div class="form-group"><label>Esta na Casa</label><select id="f-p2-casa"><option value="">--</option><option>Casa I</option><option>Casa II</option><option>Casa III</option><option>Casa IV</option><option>Casa V</option><option>Casa VI</option><option>Casa VII</option><option>Casa VIII</option><option>Casa IX</option><option>Casa X</option><option>Casa XI</option><option>Casa XII</option></select></div>
+</div></div>
 <div class="section-card">
-<div class="form-group" style="margin-bottom:14px">
-<label>Polaridade do Evento</label>
+<div class="form-group" style="margin-bottom:14px"><label>Polaridade do Evento</label>
 <div class="polaridade-row">
 <button class="pol-btn" id="pol-pos" onclick="setPolaridade('positivo')">+ Positivo</button>
 <button class="pol-btn" id="pol-neg" onclick="setPolaridade('negativo')">- Negativo</button>
@@ -298,7 +266,6 @@ textarea{resize:vertical;min-height:90px;line-height:1.6}
 <input type="hidden" id="f-polaridade" value="">
 <input type="hidden" id="f-editing-id" value="">
 </div>
-
 <div style="margin-bottom:14px">
 <button class="btn-ai" onclick="sugerirTextoIA()" style="width:100%;margin-bottom:10px">Sugerir interpretacao com IA</button>
 <div class="ia-sugestao" id="ia-sugestao-box" style="display:none">
@@ -310,17 +277,13 @@ textarea{resize:vertical;min-height:90px;line-height:1.6}
 </div>
 </div>
 </div>
-
 <div class="form-grid">
 <div class="form-group"><label>Tema</label>
-<select id="f-tema"><option value="">-- Geral --</option><option>Financeiro</option><option>Profissional e Carreira</option><option>Relacionamentos e Amor</option><option>Familia e Lar</option><option>Saude e Bem-estar</option><option>Espiritualidade e Crescimento</option><option>Transformacoes e Mudancas</option><option>Viagens e Expansao</option><option>Comunicacao e Estudos</option></select>
-</div>
+<select id="f-tema"><option value="">-- Geral --</option><option>Financeiro</option><option>Profissional e Carreira</option><option>Relacionamentos e Amor</option><option>Familia e Lar</option><option>Saude e Bem-estar</option><option>Espiritualidade e Crescimento</option><option>Transformacoes e Mudancas</option><option>Viagens e Expansao</option><option>Comunicacao e Estudos</option></select></div>
 <div class="form-group" style="justify-content:flex-end">
-<label class="checkbox-group" style="margin-top:auto"><input type="checkbox" id="f-dataforte"> Data Forte</label>
-</div>
+<label class="checkbox-group" style="margin-top:auto"><input type="checkbox" id="f-dataforte"> Data Forte</label></div>
 <div class="form-group full"><label>Descricao / Interpretacao</label>
-<textarea id="f-descricao" placeholder="Escreva ou use a sugestao da IA acima..."></textarea>
-</div>
+<textarea id="f-descricao" placeholder="Escreva ou use a sugestao da IA acima..."></textarea></div>
 </div>
 <div style="display:flex;gap:10px">
 <button class="btn btn-primary" onclick="salvarTransito()" style="flex:1;padding:12px" id="btn-salvar-evento">Salvar Evento</button>
@@ -329,7 +292,6 @@ textarea{resize:vertical;min-height:90px;line-height:1.6}
 </div>
 </div>
 
-<!-- RELATORIOS -->
 <div class="view" id="view-relatorios">
 <div class="topbar">
 <div><h2>Relatorios</h2><p id="rel-client-name" style="color:var(--muted);font-size:13px">Selecione um cliente</p></div>
@@ -348,73 +310,30 @@ textarea{resize:vertical;min-height:90px;line-height:1.6}
 <div class="events-list" id="events-list-rel"></div>
 </div>
 
-<!-- DADOS -->
 <div class="view" id="view-dados">
 <div class="topbar"><div><h2>Dados</h2><p>Exportar, importar e gerenciar seus dados</p></div></div>
 <div class="dados-grid">
-<div class="dados-card">
-<h3>Exportar Backup</h3>
-<p>Salva todos os clientes, eventos e configuracoes em um arquivo .json no seu computador. Use periodicamente para nao perder seus dados.</p>
-<button class="btn btn-primary" onclick="exportarBackup()">Exportar Backup (.json)</button>
-</div>
-<div class="dados-card">
-<h3>Importar Backup</h3>
-<p>Restaura dados a partir de um arquivo .json exportado anteriormente. Os dados atuais serao substituidos.</p>
-<input type="file" id="import-file" accept=".json" style="display:none" onchange="importarBackup(event)">
-<button class="btn btn-ghost" onclick="document.getElementById('import-file').click()">Selecionar arquivo .json</button>
-</div>
-<div class="dados-card dados-danger">
-<h3>Apagar Tudo</h3>
-<p>Remove todos os clientes, eventos e configuracoes permanentemente. Esta acao nao pode ser desfeita. Faca um backup antes.</p>
-<button class="btn btn-danger" onclick="apagarTudo()">Apagar todos os dados</button>
-</div>
-<div class="dados-card">
-<h3>Estatisticas Gerais</h3>
-<p id="stats-gerais">Carregando...</p>
-</div>
+<div class="dados-card"><h3>Exportar Backup</h3><p>Salva todos os clientes, eventos e configuracoes em um arquivo .json. Use periodicamente para nao perder seus dados.</p><button class="btn btn-primary" onclick="exportarBackup()">Exportar Backup (.json)</button></div>
+<div class="dados-card"><h3>Importar Backup</h3><p>Restaura dados a partir de um arquivo .json exportado anteriormente. Os dados atuais serao substituidos.</p><input type="file" id="import-file" accept=".json" style="display:none" onchange="importarBackup(event)"><button class="btn btn-ghost" onclick="document.getElementById('import-file').click()">Selecionar arquivo .json</button></div>
+<div class="dados-card dados-danger"><h3>Apagar Tudo</h3><p>Remove todos os clientes, eventos e configuracoes permanentemente. Faca um backup antes.</p><button class="btn btn-danger" onclick="apagarTudo()">Apagar todos os dados</button></div>
+<div class="dados-card"><h3>Estatisticas Gerais</h3><p id="stats-gerais">Carregando...</p></div>
 </div>
 </div>
 
-<!-- CONFIGURACOES -->
 <div class="view" id="view-config">
 <div class="topbar"><div><h2>Configuracoes da IA</h2><p>Regras aplicadas em todas as geracoes de texto</p></div></div>
-<div class="config-section">
-<h3>Chave de API</h3>
-<p>Para usar a IA, insira sua chave da Anthropic (sk-ant-...). Ela fica salva apenas no seu navegador.</p>
-<div class="api-key-bar" style="margin-top:0">
-<label>API Key</label>
-<input type="password" id="cfg-apikey" placeholder="sk-ant-api03-...">
-<button class="btn btn-primary" onclick="salvarApiKey()">Salvar chave</button>
-<span id="apikey-status" style="font-size:12px;color:var(--pos);display:none">Salva!</span>
+<div class="config-section"><h3>Chave de API</h3><p>Para usar a IA, insira sua chave da Anthropic (sk-ant-...). Ela fica salva apenas no seu navegador.</p>
+<div class="api-key-bar" style="margin-top:0"><label>API Key</label><input type="password" id="cfg-apikey" placeholder="sk-ant-api03-..."><button class="btn btn-primary" onclick="salvarApiKey()">Salvar chave</button><span id="apikey-status" style="font-size:12px;color:var(--pos);display:none">Salva!</span></div>
 </div>
-</div>
-<div class="config-section">
-<h3>Regras cadastradas <span id="regras-count" style="font-size:11px;color:var(--pos);font-weight:500"></span></h3>
-<p>Todas as regras abaixo sao enviadas automaticamente para a IA.</p>
+<div class="config-section"><h3>Regras cadastradas <span id="regras-count" style="font-size:11px;color:var(--pos);font-weight:500"></span></h3><p>Todas as regras abaixo sao enviadas automaticamente para a IA.</p>
 <div id="lista-regras"></div>
-<div class="add-regra-row">
-<textarea id="nova-regra" placeholder="Adicione uma nova regra..."></textarea>
-<button class="btn btn-primary" onclick="adicionarRegra()" style="height:fit-content;align-self:flex-end;white-space:nowrap">+ Adicionar</button>
+<div class="add-regra-row"><textarea id="nova-regra" placeholder="Adicione uma nova regra..."></textarea><button class="btn btn-primary" onclick="adicionarRegra()" style="height:fit-content;align-self:flex-end;white-space:nowrap">+ Adicionar</button></div>
 </div>
-</div>
-<div class="config-section">
-<h3>Estilo de escrita</h3>
+<div class="config-section"><h3>Estilo de escrita</h3>
 <div class="form-grid">
-<div class="form-group"><label>Tom dos textos</label>
-<select id="cfg-tom" onchange="salvarConfig()">
-<option value="tecnico">Tecnico e objetivo (padrao)</option>
-<option value="carinhoso">Carinhoso e proximo</option>
-<option value="espiritual">Espiritual e poetico</option>
-</select></div>
-<div class="form-group"><label>Tamanho das sugestoes</label>
-<select id="cfg-tamanho" onchange="salvarConfig()">
-<option value="curto">Curto (2-3 frases)</option>
-<option value="medio">Medio (1 paragrafo)</option>
-<option value="longo">Longo (2-3 paragrafos)</option>
-</select></div>
-<div class="form-group full"><label>Apresentacao / abordagem astrologica</label>
-<textarea id="cfg-apresentacao" onblur="salvarConfig()" style="min-height:60px" placeholder="Ex: Trabalho com astrologia classica, casas e regencias tradicionais..."></textarea>
-</div>
+<div class="form-group"><label>Tom dos textos</label><select id="cfg-tom" onchange="salvarConfig()"><option value="tecnico">Tecnico e objetivo (padrao)</option><option value="carinhoso">Carinhoso e proximo</option><option value="espiritual">Espiritual e poetico</option></select></div>
+<div class="form-group"><label>Tamanho das sugestoes</label><select id="cfg-tamanho" onchange="salvarConfig()"><option value="curto">Curto (2-3 frases)</option><option value="medio">Medio (1 paragrafo)</option><option value="longo">Longo (2-3 paragrafos)</option></select></div>
+<div class="form-group full"><label>Apresentacao / abordagem astrologica</label><textarea id="cfg-apresentacao" onblur="salvarConfig()" style="min-height:60px" placeholder="Ex: Trabalho com astrologia classica, casas e regencias tradicionais..."></textarea></div>
 </div>
 <button class="btn btn-primary" onclick="salvarConfig()">Salvar configuracoes</button>
 <span id="cfg-status" style="font-size:12px;color:var(--pos);margin-left:12px;display:none">Salvo!</span>
@@ -424,10 +343,8 @@ textarea{resize:vertical;min-height:90px;line-height:1.6}
 </main>
 </div>
 
-<!-- MODAL NOVO/EDITAR CLIENTE -->
 <div class="modal-overlay" id="modal-cliente" style="display:none" onclick="if(event.target===this)this.style.display='none'">
-<div class="modal">
-<h3 id="modal-cliente-title">Novo Cliente</h3>
+<div class="modal"><h3 id="modal-cliente-title">Novo Cliente</h3>
 <div class="form-grid">
 <div class="form-group full"><label>Nome completo</label><input type="text" id="nc-nome" placeholder="Nome do cliente"></div>
 <div class="form-group"><label>Data de nascimento</label><input type="date" id="nc-nasc"></div>
@@ -442,488 +359,60 @@ textarea{resize:vertical;min-height:90px;line-height:1.6}
 </div>
 </div>
 
-<!-- MODAL DIA -->
 <div class="modal-overlay" id="modal-dia" style="display:none" onclick="if(event.target===this)this.style.display='none'">
-<div class="modal" style="max-width:500px">
-<h3 id="modal-dia-title"></h3>
+<div class="modal" style="max-width:500px"><h3 id="modal-dia-title"></h3>
 <div id="modal-dia-content"></div>
 <div class="modal-actions"><button class="btn btn-ghost" onclick="document.getElementById('modal-dia').style.display='none'">Fechar</button></div>
 </div>
-</div>
-<script>
-var MONTHS_PT = ['Janeiro','Fevereiro','Marco','Abril','Maio','Junho','Julho','Agosto','Setembro','Outubro','Novembro','Dezembro'];
-
-var REGRAS_FIXAS = [
-'Estrutura: Estrutura obrigatoria de cada aspecto: 1) Planeta I (texto tecnico, neutro, descrevendo temas praticos da casa que rege e da casa onde esta). 2) Planeta II (mesmo padrao). 3) Sintese integrativa (linha continua reunindo os temas das casas). A sintese mostra como os temas de uma area refletem na outra.',
-'Tom: Linguagem tecnica, neutra e objetiva. Evitar subjetividade, juizo de valor e dramatizacao. Frases curtas e diretas. Texto neutro em genero: sem ele, ela ou pessoa.',
-'Vocabulario: Substituir sempre metas por objetivos. Substituir sempre transformacao por mudanca. Evitar ruidos para comunicacao, usar desentendimentos ou dificuldade de compreensao. Evitar termos em ingles.',
-'Inicio: Nao comecar textos com as palavras ciclo ou periodo. Preferir inicios como: Voce precisa..., Sera necessario..., Ha necessidade de.... Para transitos: comecar pela vivencia sem nomear o planeta logo na primeira frase.',
-'Casas: Casa I: imagem pessoal, postura, saude. Casa II: valores pessoais e financeiros. Casa III: comunicacao, acordos, documentos, carro, irmaos. Casa IV: terminios ou inicios, imoveis, estabilidade, bases, familia. Casa V: investimentos de risco, esportes, lazer, prazer, romances, criatividade, filhos. Casa VI: metodologia, trabalho, rotina, saude. Casa VII: parcerias, contratos, clientes, casamento. Casa VIII: recursos compartilhados, herancas, financas em conjunto, negociacoes. Casa IX: leis, viagens, estudos, etica, fe, expansao. Casa X: profissao, carreira, imagem publica. Casa XI: projetos coletivos, objetivos partilhados, grupos, amizades. Casa XII: bastidores, saude, recolhimento, sintonia com o coletivo.',
-'Casa VII: Sempre mencionar primeiro parcerias e contratos, depois a nivel pessoal marido ou esposa.',
-'Casa IX: Sempre incluir obrigatoriamente as palavras: leis, viagens e estudos, alem de etica, fe e expansao.',
-'Profeccoes: Redigir em tom neutro, tecnico e funcional, descrevendo apenas a interacao pratica entre as casas.',
-'Formato: Quando solicitadas frases adicionais, apresentar em formato de lista.'
-];
-
-var state = {
-clientes: JSON.parse(localStorage.getItem('astral_fn_cli') || '[]'),
-transitos: JSON.parse(localStorage.getItem('astral_fn_tra') || '[]'),
-regras: JSON.parse(localStorage.getItem('astral_fn_reg') || 'null'),
-config: JSON.parse(localStorage.getItem('astral_fn_cfg') || '{"tom":"tecnico","tamanho":"medio","apresentacao":""}'),
-clienteAtivo: null,
-calDate: new Date()
-};
-
-if (!state.regras) { state.regras = REGRAS_FIXAS.slice(); localStorage.setItem('astral_fn_reg', JSON.stringify(state.regras)); }
-
-function notif(msg, tipo) {
-var el = document.getElementById('notif');
-el.textContent = msg; el.className = 'notif ' + (tipo||'success'); el.classList.add('show');
-setTimeout(function(){ el.classList.remove('show'); }, 2800);
-}
-
-function getApiKey() { return localStorage.getItem('astral_apikey') || ''; }
-function salvarApiKey() {
-var k = document.getElementById('cfg-apikey').value.trim();
-if (!k) { alert('Digite a chave de API'); return; }
-localStorage.setItem('astral_apikey', k);
-var st = document.getElementById('apikey-status'); st.style.display='inline';
-setTimeout(function(){ st.style.display='none'; }, 2000);
-notif('Chave de API salva!');
-}
-
-function saveState() {
-localStorage.setItem('astral_fn_cli', JSON.stringify(state.clientes));
-localStorage.setItem('astral_fn_tra', JSON.stringify(state.transitos));
-localStorage.setItem('astral_fn_reg', JSON.stringify(state.regras));
-localStorage.setItem('astral_fn_cfg', JSON.stringify(state.config));
-}
-
-function buildSystemPrompt() {
-var tam = {curto:'2-3 frases',medio:'1 paragrafo',longo:'2-3 paragrafos'}[state.config.tamanho] || '1 paragrafo';
-var p = 'Voce e uma assistente especializada em astrologia que auxilia uma astrologa profissional.';
-if (state.config.apresentacao) p += '\n\nContexto: ' + state.config.apresentacao;
-p += '\n\nTamanho: ' + tam + '.';
-if (state.regras.length) p += '\n\n=== REGRAS OBRIGATORIAS ===\n' + state.regras.map(function(r,i){return (i+1)+'. '+r;}).join('\n');
-return p;
-}
-
-function polClass(pol) { if (pol==='positivo') return 'pos'; if (pol==='negativo') return 'neg'; return 'neu'; }
-
-function setPolaridade(val) {
-document.getElementById('f-polaridade').value = val;
-['pos','neg','neu'].forEach(function(c){ document.getElementById('pol-'+c).classList.remove('pos','neg','neu'); });
-var map = {positivo:'pos',negativo:'neg',neutro:'neu'};
-document.getElementById('pol-'+map[val]).classList.add(map[val]);
-}
-
-function showView(v) {
-document.querySelectorAll('.view').forEach(function(el){ el.classList.remove('active'); });
-document.querySelectorAll('.nav-item').forEach(function(el){ el.classList.remove('active'); });
-document.getElementById('view-' + v).classList.add('active');
-var navMap = {calendario:'cal',clientes:'cli',cadastro:'cad',relatorios:'rel',dados:'dad',config:'con'};
-var navEl = document.getElementById('nav-' + (navMap[v]||v.substring(0,3)));
-if (navEl) navEl.classList.add('active');
-if (v==='calendario') renderCalendar();
-if (v==='clientes') renderClientes();
-if (v==='cadastro') renderFormClientes();
-if (v==='relatorios') renderRelatorios();
-if (v==='dados') renderDados();
-if (v==='config') renderConfig();
-}
-
-function renderConfig() {
-document.getElementById('cfg-tom').value = state.config.tom || 'tecnico';
-document.getElementById('cfg-tamanho').value = state.config.tamanho || 'medio';
-document.getElementById('cfg-apresentacao').value = state.config.apresentacao || '';
-var k = getApiKey(); if (k) document.getElementById('cfg-apikey').value = k;
-renderRegras();
-}
-function salvarConfig() {
-state.config.tom = document.getElementById('cfg-tom').value;
-state.config.tamanho = document.getElementById('cfg-tamanho').value;
-state.config.apresentacao = document.getElementById('cfg-apresentacao').value;
-saveState();
-var st = document.getElementById('cfg-status'); st.style.display='inline'; setTimeout(function(){ st.style.display='none'; }, 2000);
-notif('Configuracoes salvas!');
-}
-function adicionarRegra() {
-var txt = document.getElementById('nova-regra').value.trim(); if (!txt) return;
-state.regras.push(txt); saveState(); document.getElementById('nova-regra').value = ''; renderRegras();
-notif('Regra adicionada!');
-}
-function removerRegra(i) { state.regras.splice(i,1); saveState(); renderRegras(); notif('Regra removida.'); }
-function renderRegras() {
-var lista = document.getElementById('lista-regras');
-document.getElementById('regras-count').textContent = '(' + state.regras.length + ' regras)';
-if (!state.regras.length) { lista.innerHTML = '<div style="color:var(--muted);font-size:13px;padding:10px 0">Nenhuma regra cadastrada.</div>'; return; }
-lista.innerHTML = state.regras.map(function(r,i){
-var partes = r.split(':'); var grupo = partes.length>1?partes[0]:''; var texto = partes.length>1?partes.slice(1).join(':').trim():r;
-return '<div class="regra-item"><span class="regra-grupo">'+grupo+'</span><span class="regra-texto">'+texto+'</span><button class="regra-del" onclick="removerRegra('+i+')" title="Remover">x</button></div>';
-}).join('');
-}
-
-function openNewClientModal() {
-document.getElementById('nc-nome').value=''; document.getElementById('nc-nasc').value='';
-document.getElementById('nc-tel').value=''; document.getElementById('nc-obs').value='';
-document.getElementById('nc-editing-id').value='';
-document.getElementById('modal-cliente-title').textContent='Novo Cliente';
-document.getElementById('modal-cliente').style.display='flex';
-}
-
-function editarCliente(id) {
-var c = state.clientes.find(function(x){ return x.id===id; }); if (!c) return;
-document.getElementById('nc-nome').value = c.nome||'';
-document.getElementById('nc-nasc').value = c.nasc||'';
-document.getElementById('nc-tel').value = c.tel||'';
-document.getElementById('nc-obs').value = c.obs||'';
-document.getElementById('nc-editing-id').value = id;
-document.getElementById('modal-cliente-title').textContent = 'Editar Cliente';
-document.getElementById('modal-cliente').style.display = 'flex';
-}
-
-function excluirCliente(id) {
-if (!confirm('Excluir este cliente e todos os seus eventos? Esta acao nao pode ser desfeita.')) return;
-state.clientes = state.clientes.filter(function(c){ return c.id!==id; });
-state.transitos = state.transitos.filter(function(t){ return t.clienteId!==id; });
-if (state.clienteAtivo && state.clienteAtivo.id===id) { state.clienteAtivo=null; }
-saveState(); renderSidebarClientes(); renderClientes();
-notif('Cliente excluido.', 'error');
-}
-
-function salvarCliente() {
-var nome = document.getElementById('nc-nome').value.trim();
-if (!nome) { alert('Digite o nome do cliente'); return; }
-var editId = document.getElementById('nc-editing-id').value;
-if (editId) {
-var idx = state.clientes.findIndex(function(c){ return c.id===editId; });
-if (idx>=0) {
-state.clientes[idx].nome = nome; state.clientes[idx].nasc = document.getElementById('nc-nasc').value;
-state.clientes[idx].tel = document.getElementById('nc-tel').value; state.clientes[idx].obs = document.getElementById('nc-obs').value;
-if (state.clienteAtivo && state.clienteAtivo.id===editId) state.clienteAtivo = state.clientes[idx];
-}
-notif('Cliente atualizado!');
-} else {
-state.clientes.push({ id: Date.now().toString(), nome:nome, nasc:document.getElementById('nc-nasc').value, tel:document.getElementById('nc-tel').value, obs:document.getElementById('nc-obs').value });
-notif('Cliente cadastrado!');
-}
-saveState(); document.getElementById('modal-cliente').style.display='none'; renderSidebarClientes(); renderClientes();
-}
-
-function renderSidebarClientes() {
-var list = document.getElementById('client-list'); list.innerHTML='';
-state.clientes.forEach(function(c){
-var d = document.createElement('div');
-d.className = 'client-item' + (state.clienteAtivo && state.clienteAtivo.id===c.id?' active':'');
-d.innerHTML = '<span class="client-dot"></span>' + c.nome;
-d.onclick = function(){ selectCliente(c); }; list.appendChild(d);
-});
-}
-
-function selectCliente(c) {
-state.clienteAtivo = c; renderSidebarClientes();
-document.getElementById('cal-client-name').textContent = c.nome;
-document.getElementById('rel-client-name').textContent = c.nome;
-document.getElementById('btn-ia').style.display='block';
-document.getElementById('btn-pdf').style.display='block';
-document.getElementById('btn-pdf-rel').style.display='block';
-showView('calendario');
-}
-
-function renderClientes() {
-var busca = (document.getElementById('busca-cliente')||{}).value||'';
-var grid = document.getElementById('clients-grid');
-var lista = state.clientes.filter(function(c){ return !busca || c.nome.toLowerCase().includes(busca.toLowerCase()); });
-if (!lista.length) { grid.innerHTML='<div class="empty-state" style="grid-column:1/-1"><h3>'+(busca?'Nenhum cliente encontrado':'Nenhum cliente ainda')+'</h3><p>'+(busca?'Tente outro nome':'Clique em + Novo cliente para comecar')+'</p></div>'; return; }
-grid.innerHTML = lista.map(function(c){
-var qt = state.transitos.filter(function(t){ return t.clienteId===c.id; }).length;
-return '<div class="client-card"><div onclick='selectCliente('+JSON.stringify(c)+')' style="cursor:pointer"><h3>'+c.nome+'</h3><p>'+(c.nasc?'Nasc: '+formatDate(c.nasc):'')+'</p><span class="badge">'+qt+' evento'+(qt!==1?'s':'')+'</span></div><div class="client-card-actions"><button class="btn-edit" onclick="editarCliente(''+c.id+'')">Editar</button><button class="btn-danger" onclick="excluirCliente(''+c.id+'')">Excluir</button></div></div>';
-}).join('');
-}
-function renderFormClientes() {
-var sel = document.getElementById('f-cliente');
-sel.innerHTML = state.clientes.length ? state.clientes.map(function(c){ return '<option value="'+c.id+'">'+c.nome+'</option>'; }).join('') : '<option>-- Nenhum cliente --</option>';
-if (state.clienteAtivo) sel.value = state.clienteAtivo.id;
-var dataEl = document.getElementById('f-data');
-if (!dataEl.value) dataEl.value = new Date().toISOString().split('T')[0];
-}
-
-function cancelarEdicaoEvento() {
-document.getElementById('f-editing-id').value='';
-document.getElementById('cadastro-title').textContent='Cadastrar Evento';
-document.getElementById('cadastro-subtitle').textContent='Adicionar novo evento ao calendario';
-document.getElementById('btn-salvar-evento').textContent='Salvar Evento';
-document.getElementById('btn-cancelar-evento').style.display='none';
-document.getElementById('f-descricao').value='';
-document.getElementById('f-dataforte').checked=false;
-document.getElementById('f-polaridade').value='';
-['pos','neg','neu'].forEach(function(c){ document.getElementById('pol-'+c).classList.remove('pos','neg','neu'); });
-document.getElementById('ia-sugestao-box').style.display='none';
-}
-
-function editarEvento(id) {
-var ev = state.transitos.find(function(t){ return t.id===id; }); if (!ev) return;
-renderFormClientes();
-document.getElementById('f-editing-id').value = id;
-document.getElementById('f-cliente').value = ev.clienteId||'';
-document.getElementById('f-data').value = ev.data||'';
-document.getElementById('f-tipo').value = ev.tipo||'Transito';
-document.getElementById('f-fase').value = ev.fase||'';
-document.getElementById('f-planeta1').value = ev.planeta1||'';
-document.getElementById('f-p1-rege').value = ev.p1rege||'';
-document.getElementById('f-p1-casa').value = ev.p1casa||'';
-document.getElementById('f-aspecto').value = ev.aspecto||'';
-document.getElementById('f-planeta2').value = ev.planeta2||'';
-document.getElementById('f-p2-rege').value = ev.p2rege||'';
-document.getElementById('f-p2-casa').value = ev.p2casa||'';
-document.getElementById('f-tema').value = ev.tema||'';
-document.getElementById('f-dataforte').checked = !!ev.dataForte;
-document.getElementById('f-descricao').value = ev.descricao||'';
-if (ev.polaridade) setPolaridade(ev.polaridade);
-document.getElementById('cadastro-title').textContent='Editar Evento';
-document.getElementById('cadastro-subtitle').textContent='Alterando evento existente';
-document.getElementById('btn-salvar-evento').textContent='Atualizar Evento';
-document.getElementById('btn-cancelar-evento').style.display='inline-block';
-document.getElementById('ia-sugestao-box').style.display='none';
-showView('cadastro');
-}
-
-function excluirEvento(id) {
-if (!confirm('Excluir este evento? Esta acao nao pode ser desfeita.')) return;
-state.transitos = state.transitos.filter(function(t){ return t.id!==id; });
-saveState(); renderRelatorios(); notif('Evento excluido.', 'error');
-}
-
-function salvarTransito() {
-var clienteId = document.getElementById('f-cliente').value;
-var descricao = document.getElementById('f-descricao').value.trim();
-if (!clienteId || !descricao) { alert('Preencha cliente e descricao'); return; }
-var pol = document.getElementById('f-polaridade').value;
-if (!pol) { alert('Selecione a polaridade do evento'); return; }
-var editId = document.getElementById('f-editing-id').value;
-var evData = {
-clienteId:clienteId, data:document.getElementById('f-data').value,
-planeta1:document.getElementById('f-planeta1').value, p1rege:document.getElementById('f-p1-rege').value, p1casa:document.getElementById('f-p1-casa').value,
-aspecto:document.getElementById('f-aspecto').value,
-planeta2:document.getElementById('f-planeta2').value, p2rege:document.getElementById('f-p2-rege').value, p2casa:document.getElementById('f-p2-casa').value,
-tipo:document.getElementById('f-tipo').value, fase:document.getElementById('f-fase').value, tema:document.getElementById('f-tema').value,
-polaridade:pol, descricao:descricao, dataForte:document.getElementById('f-dataforte').checked
-};
-if (editId) {
-var idx = state.transitos.findIndex(function(t){ return t.id===editId; });
-if (idx>=0) { evData.id=editId; state.transitos[idx]=evData; notif('Evento atualizado!'); }
-cancelarEdicaoEvento();
-} else {
-evData.id = Date.now().toString(); state.transitos.push(evData);
-document.getElementById('f-descricao').value=''; document.getElementById('f-dataforte').checked=false;
-document.getElementById('f-polaridade').value='';
-['pos','neg','neu'].forEach(function(c){ document.getElementById('pol-'+c).classList.remove('pos','neg','neu'); });
-document.getElementById('ia-sugestao-box').style.display='none';
-notif('Evento salvo com sucesso!');
-}
-saveState();
-}
-
-async function sugerirTextoIA() {
-var p1 = document.getElementById('f-planeta1').value, asp = document.getElementById('f-aspecto').value, p2 = document.getElementById('f-planeta2').value;
-if (!p1||!asp||!p2) { alert('Selecione Planeta 1, Aspecto e Planeta 2 primeiro.'); return; }
-var apiKey = getApiKey(); if (!apiKey) { alert('Configure sua chave de API em Configuracoes IA para usar esta funcao.'); showView('config'); return; }
-var p1r=document.getElementById('f-p1-rege').value, p1c=document.getElementById('f-p1-casa').value;
-var p2r=document.getElementById('f-p2-rege').value, p2c=document.getElementById('f-p2-casa').value;
-var tipo=document.getElementById('f-tipo').value, fase=document.getElementById('f-fase').value;
-var pol=document.getElementById('f-polaridade').value||'neutro', tema=document.getElementById('f-tema').value;
-var box=document.getElementById('ia-sugestao-box'), txt=document.getElementById('ia-sugestao-texto');
-box.style.display='block'; txt.value='Gerando sugestao, aguarde...';
-var sys=buildSystemPrompt();
-var userMsg='Escreva uma interpretacao astrologica seguindo TODAS as regras para:\n\nTipo: '+tipo+'\nAspecto: '+p1+' '+asp+' '+p2+'\n'+(p1r?p1+' rege a '+p1r+(p1c?' e esta na '+p1c:'')+'.\n':'')+(p2r?p2+' rege a '+p2r+(p2c?' e esta na '+p2c:'')+'.\n':'')+'Fase: '+(fase||'nao informada')+'\nPolaridade: '+pol+'\nTema: '+(tema||'Geral')+'\n\nUsar estrutura: Planeta I -> Planeta II -> Sintese integrativa. Escrever apenas o texto, sem titulos de secao.';
-try {
-var r = await fetch('https://api.anthropic.com/v1/messages', { method:'POST', headers:{'Content-Type':'application/json','x-api-key':apiKey,'anthropic-version':'2023-06-01','anthropic-dangerous-direct-browser-inaccessible':'true'}, body:JSON.stringify({ model:'claude-sonnet-4-20250514', max_tokens:600, system:sys, messages:[{role:'user',content:userMsg}] }) });
-var data = await r.json();
-if (data.error) { txt.value='Erro: '+data.error.message; return; }
-txt.value = data.content&&data.content[0]?data.content[0].text:'Erro ao gerar.';
-} catch(e) { txt.value='Erro na conexao. Verifique sua internet e a chave de API.'; }
-}
-function usarSugestao() { document.getElementById('f-descricao').value=document.getElementById('ia-sugestao-texto').value; document.getElementById('ia-sugestao-box').style.display='none'; }
-
-async function gerarTextoIA() {
-if (!state.clienteAtivo) { alert('Selecione um cliente primeiro'); return; }
-var apiKey=getApiKey(); if (!apiKey) { alert('Configure sua chave de API.'); showView('config'); return; }
-var fortes=state.transitos.filter(function(t){ return t.clienteId===state.clienteAtivo.id&&t.dataForte&&t.descricao; });
-if (!fortes.length) { alert('Nenhum evento com Data Forte marcado.'); return; }
-var panel=document.getElementById('ai-panel'), output=document.getElementById('ai-output');
-panel.style.display='block'; panel.scrollIntoView({behavior:'smooth'});
-output.innerHTML='<span style="color:var(--muted)"><span class="loader"></span> Organizando com IA...</span>';
-var temas={};
-fortes.forEach(function(t){ var key=t.tema||'Geral'; if (!temas[key]) temas[key]=[]; temas[key].push('['+( t.polaridade||'neutro')+'] '+(t.tipo?'['+t.tipo+'] ':'')+( t.planeta1||'')+' '+(t.aspecto||'')+' '+(t.planeta2||'')+(t.p1rege?' ('+t.planeta1+' rege '+t.p1rege+' na '+t.p1casa+')':('' ))+( t.p2rege?' ('+t.planeta2+' rege '+t.p2rege+' na '+t.p2casa+')':'')+': '+t.descricao); });
-var lista=Object.entries(temas).map(function(entry){ return 'TEMA: '+entry[0]+'\n'+entry[1].map(function(t,i){ return (i+1)+'. '+t; }).join('\n'); }).join('\n\n---\n\n');
-var sys=buildSystemPrompt();
-try {
-var r=await fetch('https://api.anthropic.com/v1/messages',{method:'POST',headers:{'Content-Type':'application/json','x-api-key':apiKey,'anthropic-version':'2023-06-01','anthropic-dangerous-direct-browser-inaccessible':'true'},body:JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:1500,system:sys,messages:[{role:'user',content:'Reescreva as interpretacoes em texto corrido por tema, seguindo TODAS as regras. Use a polaridade para dar o tom. Mantenha titulos por tema.\n\n'+lista}]})});
-var data=await r.json();
-if (data.error) { output.innerHTML='<p style="color:#C0392B">Erro: '+data.error.message+'</p>'; return; }
-var texto=data.content&&data.content[0]?data.content[0].text:'Erro ao gerar texto.';
-var sections=texto.split(/\n(?=[A-Z])/);
-output.innerHTML=sections.map(function(s){ var lines=s.trim().split('\n'); var title=lines[0]; var body=lines.slice(1).join('\n').trim(); if(!body) return '<div class="ai-text" style="margin-bottom:14px">'+title+'</div>'; return '<div class="ai-section"><div class="ai-section-title">'+title+'</div><div class="ai-text">'+body+'</div></div>'; }).join('');
-} catch(e) { output.innerHTML='<p style="color:#C0392B">Erro na conexao.</p>'; }
-}
-function copiarTexto() { navigator.clipboard.writeText(document.getElementById('ai-output').innerText).then(function(){ notif('Texto copiado!'); }); }
-
-function gerarPDF() {
-if (!state.clienteAtivo) { alert('Selecione um cliente primeiro'); return; }
-var evs=state.transitos.filter(function(t){ return t.clienteId===state.clienteAtivo.id; }).sort(function(a,b){ return (a.data||'').localeCompare(b.data||''); });
-if (!evs.length) { alert('Nenhum evento cadastrado.'); return; }
-var c=state.clienteAtivo;
-var corPol={positivo:'#1A6B3A',negativo:'#B82020',neutro:'#1A4A8B'}, bgPol={positivo:'#E8F5EE',negativo:'#FDEAEA',neutro:'#EAF0FB'}, labelPol={positivo:'Positivo',negativo:'Negativo',neutro:'Neutro'};
-var rows=evs.map(function(ev){ var pol=ev.polaridade||'neutro',cor=corPol[pol],bg=bgPol[pol]; var casas=[ev.p1rege?ev.planeta1+' rege '+ev.p1rege+(ev.p1casa?' na '+ev.p1casa:''):'',ev.p2rege?ev.planeta2+' rege '+ev.p2rege+(ev.p2casa?' na '+ev.p2casa:''):''].filter(Boolean).join(' | '); return '<div style="margin-bottom:18px;padding:14px 16px;border-radius:8px;border-left:4px solid '+cor+';background:'+bg+';page-break-inside:avoid"><div style="display:flex;justify-content:space-between;margin-bottom:6px"><div><span style="font-size:13px;font-weight:600;color:'+cor+'">'+formatDate(ev.data)+'</span>'+(ev.dataForte?'<span style="margin-left:8px;font-size:10px;padding:2px 6px;border-radius:10px;background:#F5E6B0;color:#7A6010">Data Forte</span>':'')+'</div><span style="font-size:10px;padding:2px 8px;border-radius:10px;background:'+bg+';color:'+cor+';border:1px solid '+cor+'">'+(labelPol[pol]||'Neutro')+'</span></div><div style="font-size:16px;font-weight:500;color:#1A1408;margin-bottom:4px">'+(ev.planeta1||'')+' '+(ev.aspecto||'')+' '+(ev.planeta2||'')+'</div>'+(casas?'<div style="font-size:11px;color:#7A7060;margin-bottom:6px">'+casas+'</div>':'')+'<div style="display:flex;gap:12px;margin-bottom:8px">'+(ev.tipo?'<span style="font-size:10px;color:#7A7060">'+ev.tipo+'</span>':'')+(ev.fase?'<span style="font-size:10px;color:#7A7060">'+ev.fase+'</span>':'')+(ev.tema?'<span style="font-size:10px;color:#8B6914;font-weight:500">'+ev.tema+'</span>':'')+'</div><div style="font-size:13px;color:#2C2416;line-height:1.7;font-style:italic">'+ev.descricao+'</div></div>'; }).join('');
-var html='<!DOCTYPE html><html><head><meta charset="UTF-8"><style>*{box-sizing:border-box;margin:0;padding:0}body{font-family:Georgia,serif;color:#2C2416;background:#fff;padding:40px;max-width:780px;margin:0 auto}@media print{body{padding:20px}@page{margin:2cm}}</style></head><body><div style="text-align:center;margin-bottom:36px;padding-bottom:24px;border-bottom:1px solid #DDD8CE"><div style="font-size:28px;font-weight:300;color:#8B6914;letter-spacing:2px">Astral - Mapa de Transitos</div><div style="font-size:16px;color:#7A7060;margin-top:8px">'+c.nome+'</div>'+(c.nasc?'<div style="font-size:13px;color:#7A7060;margin-top:4px">Nascimento: '+formatDate(c.nasc)+'</div>':'')+'<div style="font-size:12px;color:#7A7060;margin-top:4px">Gerado em '+new Date().toLocaleDateString('pt-BR')+'</div><div style="display:flex;justify-content:center;gap:24px;margin-top:16px;font-size:12px"><span style="color:#1A6B3A">Positivo</span><span style="color:#B82020">Negativo</span><span style="color:#1A4A8B">Neutro</span></div></div>'+rows+'<div style="text-align:center;margin-top:40px;padding-top:20px;border-top:1px solid #DDD8CE;font-size:11px;color:#7A7060">Documento gerado pelo Astral - Programa de Transitos</div></body></html>';
-var win=window.open('','_blank'); win.document.write(html); win.document.close(); setTimeout(function(){ win.print(); }, 800);
-}
-
-function formatDate(d) { if (!d) return ''; var p=d.split('-'); return p[2]+'/'+p[1]+'/'+p[0]; }
-
-function changeMonth(d) { state.calDate=new Date(state.calDate.getFullYear(),state.calDate.getMonth()+d,1); renderCalendar(); }
-function renderCalendar() {
-var d=state.calDate;
-document.getElementById('cal-month-label').textContent=MONTHS_PT[d.getMonth()]+' '+d.getFullYear();
-var grid=document.getElementById('cal-grid');
-while (grid.children.length>7) grid.removeChild(grid.lastChild);
-var today=new Date();
-var firstDay=new Date(d.getFullYear(),d.getMonth(),1).getDay();
-var daysInMonth=new Date(d.getFullYear(),d.getMonth()+1,0).getDate();
-var daysInPrev=new Date(d.getFullYear(),d.getMonth(),0).getDate();
-var tc=state.clienteAtivo?state.transitos.filter(function(t){ return t.clienteId===state.clienteAtivo.id; }):[];
-function getEv(y,m,day){ var ds=y+'-'+String(m+1).padStart(2,'0')+'-'+String(day).padStart(2,'0'); return tc.filter(function(t){ return t.data===ds; }); }
-for (var i=0;i<firstDay;i++) grid.appendChild(makeCell(daysInPrev-firstDay+i+1,d.getFullYear(),d.getMonth()-1,true,[]));
-for (var day=1;day<=daysInMonth;day++){ var isToday=today.getDate()===day&&today.getMonth()===d.getMonth()&&today.getFullYear()===d.getFullYear(); grid.appendChild(makeCell(day,d.getFullYear(),d.getMonth(),false,getEv(d.getFullYear(),d.getMonth(),day),isToday)); }
-var rem=(firstDay+daysInMonth)%7; if (rem>0) for (var i2=1;i2<=7-rem;i2++) grid.appendChild(makeCell(i2,d.getFullYear(),d.getMonth()+1,true,[]));
-}
-function makeCell(day,year,month,otherMonth,events,isToday) {
-var cell=document.createElement('div');
-var hasStrong=events.some(function(e){ return e.dataForte; });
-var dp=events.length?(events[0].polaridade||'neutro'):null;
-var cls='cal-cell'+(otherMonth?' other-month':'')+(isToday?' today':'');
-if (hasStrong) cls+=' strong-date'; else if (events.length) cls+=' has-events';
-cell.className=cls;
-if (events.length&&dp){ var cs={positivo:'var(--pos-border)',negativo:'var(--neg-border)',neutro:'var(--neu-border)'}; var bs={positivo:'var(--pos-bg)',negativo:'var(--neg-bg)',neutro:'var(--neu-bg)'}; cell.style.borderColor=cs[dp]; if (hasStrong) cell.style.background=bs[dp]; }
-var numEl=document.createElement('div'); numEl.className='cal-num'; numEl.textContent=day; cell.appendChild(numEl);
-events.slice(0,3).forEach(function(ev){ var dot=document.createElement('div'); var pc=polClass(ev.polaridade); dot.className='event-dot '+pc+(ev.dataForte?' strong':''); dot.textContent=(ev.planeta1||'EV').substring(0,3); cell.appendChild(dot); });
-if (events.length>3){ var more=document.createElement('div'); more.style.cssText='font-size:9px;color:var(--muted);margin-top:2px'; more.textContent='+'+(events.length-3)+' mais'; cell.appendChild(more); }
-if (events.length){ (function(day,year,month,events){ cell.onclick=function(){ showDayModal(day,year,month,events); }; })(day,year,month,events); }
-return cell;
-}
-
-function showDayModal(day,year,month,events) {
-document.getElementById('modal-dia-title').textContent=day+' de '+MONTHS_PT[month]+' de '+year;
-document.getElementById('modal-dia-content').innerHTML=events.map(function(ev){
-var pc=polClass(ev.polaridade), polLabel={positivo:'Positivo',negativo:'Negativo',neutro:'Neutro'}[ev.polaridade]||'Neutro';
-return '<div style="padding:12px 0;border-bottom:1px solid var(--border);border-left:3px solid var(--'+pc+');padding-left:10px;margin-left:-10px"><div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px"><span style="font-size:14px;font-weight:500;color:var(--'+pc+')">'+(ev.planeta1||'')+' '+(ev.aspecto||'')+' '+(ev.planeta2||'')+'</span><div style="display:flex;gap:6px"><span class="tag tag-'+pc+'">'+polLabel+'</span>'+(ev.dataForte?'<span class="tag tag-strong">Data Forte</span>':'')+'</div></div><div style="font-size:11px;color:var(--muted);margin-bottom:4px">'+(ev.tipo||'Transito')+(ev.fase?' - '+ev.fase:'')+'</div><div style="font-size:12px;color:var(--accent);margin-bottom:6px">'+(ev.p1rege?ev.planeta1+': rege '+ev.p1rege+' na '+(ev.p1casa||'?')+' ':'')+( ev.p2rege?ev.planeta2+': rege '+ev.p2rege+' na '+(ev.p2casa||'?'):'')+'</div>'+(ev.tema?'<div style="font-size:10px;color:var(--gold);text-transform:uppercase;letter-spacing:1px;margin-bottom:6px">'+ev.tema+'</div>':'')+'<p style="font-size:13px;color:var(--'+pc+');line-height:1.6;font-style:italic">'+ev.descricao+'</p></div>';
-}).join('');
-document.getElementById('modal-dia').style.display='flex';
-}
-function renderRelatorios() {
-if (!state.clienteAtivo) {
-document.getElementById('stat-grid').innerHTML='<div class="empty-state" style="grid-column:1/-1"><h3>Selecione um cliente</h3></div>';
-document.getElementById('charts-grid').innerHTML=''; document.getElementById('events-list-rel').innerHTML=''; return;
-}
-var evs=state.transitos.filter(function(t){ return t.clienteId===state.clienteAtivo.id; });
-// Preencher anos
-var anoSel=document.getElementById('r-ano');
-var anos=[...new Set(evs.map(function(t){ return t.data?t.data.substring(0,4):''; }).filter(Boolean))].sort();
-var anoAtual=anoSel.value;
-anoSel.innerHTML='<option value="">Todos</option>'+anos.map(function(a){ return '<option value="'+a+'" '+(a===anoAtual?'selected':'')+'>'+a+'</option>'; }).join('');
-var fA=anoSel.value, fM=document.getElementById('r-mes').value, fT=document.getElementById('r-tipo').value;
-var fTe=document.getElementById('r-tema').value, fP=document.getElementById('r-pol').value, fF=document.getElementById('r-forte').value;
-if (fA) evs=evs.filter(function(t){ return t.data&&t.data.substring(0,4)===fA; });
-if (fM) evs=evs.filter(function(t){ return t.data&&t.data.substring(5,7)===fM; });
-if (fT) evs=evs.filter(function(t){ return t.tipo===fT; });
-if (fTe) evs=evs.filter(function(t){ return t.tema===fTe; });
-if (fP) evs=evs.filter(function(t){ return t.polaridade===fP; });
-if (fF==='forte') evs=evs.filter(function(t){ return t.dataForte; });
-evs.sort(function(a,b){ return (a.data||'').localeCompare(b.data||''); });
-var pos=evs.filter(function(t){ return t.polaridade==='positivo'; }).length;
-var neg=evs.filter(function(t){ return t.polaridade==='negativo'; }).length;
-var neu=evs.filter(function(t){ return t.polaridade==='neutro'; }).length;
-var fortes=evs.filter(function(t){ return t.dataForte; }).length;
-document.getElementById('stat-grid').innerHTML=
-'<div class="stat-card"><div class="stat-num">'+evs.length+'</div><div class="stat-label">Total</div></div>'+
-'<div class="stat-card pos"><div class="stat-num">'+pos+'</div><div class="stat-label">Positivos</div></div>'+
-'<div class="stat-card neg"><div class="stat-num">'+neg+'</div><div class="stat-label">Negativos</div></div>'+
-'<div class="stat-card neu"><div class="stat-num">'+neu+'</div><div class="stat-label">Neutros</div></div>'+
-'<div class="stat-card"><div class="stat-num" style="color:var(--gold)">'+fortes+'</div><div class="stat-label">Datas Fortes</div></div>';
-document.getElementById('charts-grid').innerHTML=
-barChart('Por Tema',groupCount(evs,'tema','Geral'),'#8B6914')+
-barChart('Por Tipo',groupCount(evs,'tipo','Transito'),'#6B5EA8')+
-barChart('Por Mes',groupCountMes(evs),'#27704A')+
-barChartMulti('Por Polaridade',[['Positivo',pos],['Negativo',neg],['Neutro',neu]].filter(function(x){ return x[1]>0; }),['#1A6B3A','#B82020','#1A4A8B']);
-if (!evs.length) { document.getElementById('events-list-rel').innerHTML='<div class="no-results">Nenhum evento encontrado.</div>'; return; }
-document.getElementById('events-list-rel').innerHTML='<div class="events-list-header"><h3>Eventos ('+evs.length+')</h3></div>'+
-evs.map(function(ev){
-var pc=polClass(ev.polaridade);
-var desc=(ev.planeta1||'')+' '+(ev.aspecto||'')+' '+(ev.planeta2||'')+(ev.descricao?' - '+ev.descricao.substring(0,35)+(ev.descricao.length>35?'...':''):'');
-return '<div class="event-row '+pc+'"><div class="event-date">'+formatDate(ev.data)+'</div><div class="event-desc" style="color:var(--'+pc+')">'+desc+'</div><div style="font-size:11px;color:var(--muted)">'+(ev.tipo||'Transito')+'</div><div><span class="tag tag-'+pc+'" style="font-size:10px">'+(ev.polaridade||'neutro')+'</span></div><div style="font-size:10px;color:var(--muted)">'+(ev.tema||'Geral')+(ev.dataForte?' F':'')+'</div><div class="event-actions"><button class="btn-edit" onclick="editarEvento(''+ev.id+'')" style="font-size:10px;padding:4px 8px">Editar</button> <button class="btn-danger" onclick="excluirEvento(''+ev.id+'')" style="font-size:10px;padding:4px 8px">Excluir</button></div></div>';
-}).join('');
-}
-
-function groupCount(evs,field,fallback){ var map={}; evs.forEach(function(e){ var k=e[field]||fallback; map[k]=(map[k]||0)+1; }); return Object.entries(map).sort(function(a,b){ return b[1]-a[1]; }); }
-function groupCountMes(evs){ var map={}; evs.forEach(function(e){ if (!e.data) return; var m=parseInt(e.data.substring(5,7),10); var k=MONTHS_PT[m-1].substring(0,3); map[k]=(map[k]||0)+1; }); var order=['Jan','Fev','Mar','Abr','Mai','Jun','Jul','Ago','Set','Out','Nov','Dez']; return Object.entries(map).sort(function(a,b){ return order.indexOf(a[0])-order.indexOf(b[0]); }); }
-function barChart(title,data,color){ if (!data.length) return '<div class="chart-card"><div class="chart-title">'+title+'</div><div style="color:var(--muted);font-size:12px">Sem dados</div></div>'; var max=Math.max.apply(null,data.map(function(d){ return d[1]; })); return '<div class="chart-card"><div class="chart-title">'+title+'</div>'+data.map(function(item){ return '<div class="bar-row"><div class="bar-label">'+item[0]+'</div><div class="bar-track"><div class="bar-fill" style="width:'+Math.round((item[1]/max)*100)+'%;background:'+color+'"></div></div><div class="bar-val">'+item[1]+'</div></div>'; }).join('')+'</div>'; }
-function barChartMulti(title,data,colors){ if (!data.length) return '<div class="chart-card"><div class="chart-title">'+title+'</div><div style="color:var(--muted);font-size:12px">Sem dados</div></div>'; var max=Math.max.apply(null,data.map(function(d){ return d[1]; })); return '<div class="chart-card"><div class="chart-title">'+title+'</div>'+data.map(function(item,i){ return '<div class="bar-row"><div class="bar-label">'+item[0]+'</div><div class="bar-track"><div class="bar-fill" style="width:'+Math.round((item[1]/max)*100)+'%;background:'+colors[i]+'"></div></div><div class="bar-val">'+item[1]+'</div></div>'; }).join('')+'</div>'; }
-
-function renderDados() {
-var totalCli=state.clientes.length, totalEv=state.transitos.length;
-var pos=state.transitos.filter(function(t){ return t.polaridade==='positivo'; }).length;
-var neg=state.transitos.filter(function(t){ return t.polaridade==='negativo'; }).length;
-var neu=state.transitos.filter(function(t){ return t.polaridade==='neutro'; }).length;
-document.getElementById('stats-gerais').innerHTML=
-'<strong>'+totalCli+'</strong> cliente'+(totalCli!==1?'s':'')+' cadastrado'+(totalCli!==1?'s':'')+'<br>'+
-'<strong>'+totalEv+'</strong> evento'+(totalEv!==1?'s':'')+' no total<br>'+
-'<span style="color:var(--pos)">'+pos+' positivos</span> &bull; <span style="color:var(--neg)">'+neg+' negativos</span> &bull; <span style="color:var(--neu)">'+neu+' neutros</span>';
-}
-
-function exportarBackup() {
-var backup = { versao:'1.0', data:new Date().toISOString(), clientes:state.clientes, transitos:state.transitos, regras:state.regras, config:state.config };
-var json = JSON.stringify(backup, null, 2);
-var blob = new Blob([json], {type:'application/json'});
-var url = URL.createObjectURL(blob);
-var a = document.createElement('a'); a.href=url; a.download='astral_backup_'+new Date().toISOString().slice(0,10)+'.json'; a.click(); URL.revokeObjectURL(url);
-notif('Backup exportado com sucesso!');
-}
-
-function importarBackup(event) {
-var file = event.target.files[0]; if (!file) return;
-if (!confirm('Importar backup? Os dados atuais serao substituidos.')) { event.target.value=''; return; }
-var reader = new FileReader();
-reader.onload = function(e) {
-try {
-var backup = JSON.parse(e.target.result);
-if (!backup.clientes || !backup.transitos) throw new Error('Arquivo invalido');
-state.clientes = backup.clientes || [];
-state.transitos = backup.transitos || [];
-state.regras = backup.regras || REGRAS_FIXAS.slice();
-state.config = backup.config || {tom:'tecnico',tamanho:'medio',apresentacao:''};
-state.clienteAtivo = null;
-saveState(); renderSidebarClientes(); renderDados();
-notif('Backup importado com sucesso!');
-} catch(err) { alert('Erro ao importar: arquivo invalido ou corrompido.'); }
-event.target.value='';
-};
-reader.readAsText(file);
-}
-
-function apagarTudo() {
-if (!confirm('ATENCAO: Isso vai apagar TODOS os clientes, eventos e configuracoes. Esta acao nao pode ser desfeita. Tem certeza?')) return;
-if (!confirm('Confirmar exclusao de todos os dados?')) return;
-state.clientes=[]; state.transitos=[]; state.clienteAtivo=null;
-state.regras=REGRAS_FIXAS.slice(); state.config={tom:'tecnico',tamanho:'medio',apresentacao:''};
-saveState(); renderSidebarClientes(); renderDados();
-notif('Todos os dados foram apagados.', 'error');
-}
-
-// INIT
-var today=new Date();
-document.getElementById('f-data').value=today.toISOString().split('T')[0];
-renderSidebarClientes();
-renderCalendar();
-</script>
-</body>
-</html>
+</div><script>
+var MONTHS_PT=['Janeiro','Fevereiro','Marco','Abril','Maio','Junho','Julho','Agosto','Setembro','Outubro','Novembro','Dezembro'];
+var REGRAS_FIXAS=['Estrutura: Estrutura obrigatoria de cada aspecto: 1) Planeta I (texto tecnico, neutro, descrevendo temas praticos da casa que rege e da casa onde esta). 2) Planeta II (mesmo padrao). 3) Sintese integrativa (linha continua reunindo os temas das casas). A sintese mostra como os temas de uma area refletem na outra.','Tom: Linguagem tecnica, neutra e objetiva. Evitar subjetividade, juizo de valor e dramatizacao. Frases curtas e diretas. Texto neutro em genero: sem ele, ela ou pessoa.','Vocabulario: Substituir sempre metas por objetivos. Substituir sempre transformacao por mudanca. Evitar ruidos para comunicacao, usar desentendimentos ou dificuldade de compreensao. Evitar termos em ingles.','Inicio: Nao comecar textos com as palavras ciclo ou periodo. Preferir inicios como: Voce precisa..., Sera necessario..., Ha necessidade de.... Para transitos: comecar pela vivencia sem nomear o planeta logo na primeira frase.','Casas: Casa I: imagem pessoal, postura, saude. Casa II: valores pessoais e financeiros. Casa III: comunicacao, acordos, documentos, carro, irmaos. Casa IV: terminios ou inicios, imoveis, estabilidade, bases, familia. Casa V: investimentos de risco, esportes, lazer, prazer, romances, criatividade, filhos. Casa VI: metodologia, trabalho, rotina, saude. Casa VII: parcerias, contratos, clientes, casamento. Casa VIII: recursos compartilhados, herancas, financas em conjunto, negociacoes. Casa IX: leis, viagens, estudos, etica, fe, expansao. Casa X: profissao, carreira, imagem publica. Casa XI: projetos coletivos, objetivos partilhados, grupos, amizades. Casa XII: bastidores, saude, recolhimento, sintonia com o coletivo.','Casa VII: Sempre mencionar primeiro parcerias e contratos, depois a nivel pessoal marido ou esposa.','Casa IX: Sempre incluir obrigatoriamente as palavras: leis, viagens e estudos, alem de etica, fe e expansao.','Profeccoes: Redigir em tom neutro, tecnico e funcional, descrevendo apenas a interacao pratica entre as casas.','Formato: Quando solicitadas frases adicionais, apresentar em formato de lista.'];
+var state={clientes:JSON.parse(localStorage.getItem('astral_fn_cli')||'[]'),transitos:JSON.parse(localStorage.getItem('astral_fn_tra')||'[]'),regras:JSON.parse(localStorage.getItem('astral_fn_reg')||'null'),config:JSON.parse(localStorage.getItem('astral_fn_cfg')||'{"tom":"tecnico","tamanho":"medio","apresentacao":""}'),clienteAtivo:null,calDate:new Date()};
+if(!state.regras){state.regras=REGRAS_FIXAS.slice();localStorage.setItem('astral_fn_reg',JSON.stringify(state.regras));}
+function notif(msg,tipo){var el=document.getElementById('notif');el.textContent=msg;el.className='notif '+(tipo||'verde');el.classList.add('show');setTimeout(function(){el.classList.remove('show');},2800);}
+function getApiKey(){return localStorage.getItem('astral_apikey')||'';}
+function salvarApiKey(){var k=document.getElementById('cfg-apikey').value.trim();if(!k){alert('Digite a chave de API');return;}localStorage.setItem('astral_apikey',k);var st=document.getElementById('apikey-status');st.style.display='inline';setTimeout(function(){st.style.display='none';},2000);notif('Chave de API salva!');}
+function saveState(){localStorage.setItem('astral_fn_cli',JSON.stringify(state.clientes));localStorage.setItem('astral_fn_tra',JSON.stringify(state.transitos));localStorage.setItem('astral_fn_reg',JSON.stringify(state.regras));localStorage.setItem('astral_fn_cfg',JSON.stringify(state.config));}
+function buildSystemPrompt(){var tam={curto:'2-3 frases',medio:'1 paragrafo',longo:'2-3 paragrafos'}[state.config.tamanho]||'1 paragrafo';var p='Voce e uma assistente especializada em astrologia que auxilia uma astrologa profissional.';if(state.config.apresentacao)p+='\n\nContexto: '+state.config.apresentacao;p+='\n\nTamanho: '+tam+'.';if(state.regras.length)p+='\n\n=== REGRAS OBRIGATORIAS ===\n'+state.regras.map(function(r,i){return (i+1)+'. '+r;}).join('\n');return p;}
+function polClass(pol){if(pol==='positivo')return 'pos';if(pol==='negativo')return 'neg';return 'neu';}
+function setPolaridade(val){document.getElementById('f-polaridade').value=val;['pos','neg','neu'].forEach(function(c){document.getElementById('pol-'+c).classList.remove('pos','neg','neu');});var map={positivo:'pos',negativo:'neg',neutro:'neu'};document.getElementById('pol-'+map[val]).classList.add(map[val]);}
+function showView(v){document.querySelectorAll('.view').forEach(function(el){el.classList.remove('active');});document.querySelectorAll('.nav-item').forEach(function(el){el.classList.remove('active');});document.getElementById('view-'+v).classList.add('active');var navMap={calendario:'cal',clientes:'cli',cadastro:'cad',relatorios:'rel',dados:'dad',config:'con'};var navEl=document.getElementById('nav-'+(navMap[v]||v.substring(0,3)));if(navEl)navEl.classList.add('active');if(v==='calendario')renderCalendar();if(v==='clientes')renderClientes();if(v==='cadastro')renderFormClientes();if(v==='relatorios')renderRelatorios();if(v==='dados')renderDados();if(v==='config')renderConfig();}
+function renderConfig(){document.getElementById('cfg-tom').value=state.config.tom||'tecnico';document.getElementById('cfg-tamanho').value=state.config.tamanho||'medio';document.getElementById('cfg-apresentacao').value=state.config.apresentacao||'';var k=getApiKey();if(k)document.getElementById('cfg-apikey').value=k;renderRegras();}
+function salvarConfig(){state.config.tom=document.getElementById('cfg-tom').value;state.config.tamanho=document.getElementById('cfg-tamanho').value;state.config.apresentacao=document.getElementById('cfg-apresentacao').value;saveState();var st=document.getElementById('cfg-status');st.style.display='inline';setTimeout(function(){st.style.display='none';},2000);notif('Configuracoes salvas!');}
+function adicionarRegra(){var txt=document.getElementById('nova-regra').value.trim();if(!txt)return;state.regras.push(txt);saveState();document.getElementById('nova-regra').value='';renderRegras();notif('Regra adicionada!');}
+function removerRegra(i){state.regras.splice(i,1);saveState();renderRegras();notif('Regra removida.');}
+function renderRegras(){var lista=document.getElementById('lista-regras');document.getElementById('regras-count').textContent='('+state.regras.length+' regras)';if(!state.regras.length){lista.innerHTML='<div style="color:var(--muted);font-size:13px;padding:10px 0">Nenhuma regra cadastrada.</div>';return;}lista.innerHTML=state.regras.map(function(r,i){var partes=r.split(':');var grupo=partes.length>1?partes[0]:'';var texto=partes.length>1?partes.slice(1).join(':').trim():r;return '<div class="regra-item"><span class="regra-grupo">'+grupo+'</span><span class="regra-texto">'+texto+'</span><button class="regra-del" onclick="removerRegra('+i+')" title="Remover">x</button></div>';}).join('');}
+function openNewClientModal(){document.getElementById('nc-nome').value='';document.getElementById('nc-nasc').value='';document.getElementById('nc-tel').value='';document.getElementById('nc-obs').value='';document.getElementById('nc-editing-id').value='';document.getElementById('modal-cliente-title').textContent='Novo Cliente';document.getElementById('modal-cliente').style.display='flex';}
+function editarCliente(id){var c=state.clientes.find(function(x){return x.id===id;});if(!c)return;document.getElementById('nc-nome').value=c.nome||'';document.getElementById('nc-nasc').value=c.nasc||'';document.getElementById('nc-tel').value=c.tel||'';document.getElementById('nc-obs').value=c.obs||'';document.getElementById('nc-editing-id').value=id;document.getElementById('modal-cliente-title').textContent='Editar Cliente';document.getElementById('modal-cliente').style.display='flex';}
+function excluirCliente(id){if(!confirm('Excluir este cliente e todos os seus eventos? Esta acao nao pode ser desfeita.'))return;state.clientes=state.clientes.filter(function(c){return c.id!==id;});state.transitos=state.transitos.filter(function(t){return t.clienteId!==id;});if(state.clienteAtivo&&state.clienteAtivo.id===id)state.clienteAtivo=null;saveState();renderSidebarClientes();renderClientes();notif('Cliente excluido.','vermelho');}
+function salvarCliente(){var nome=document.getElementById('nc-nome').value.trim();if(!nome){alert('Digite o nome do cliente');return;}var editId=document.getElementById('nc-editing-id').value;if(editId){var idx=state.clientes.findIndex(function(c){return c.id===editId;});if(idx>=0){state.clientes[idx].nome=nome;state.clientes[idx].nasc=document.getElementById('nc-nasc').value;state.clientes[idx].tel=document.getElementById('nc-tel').value;state.clientes[idx].obs=document.getElementById('nc-obs').value;if(state.clienteAtivo&&state.clienteAtivo.id===editId)state.clienteAtivo=state.clientes[idx];}notif('Cliente atualizado!');}else{state.clientes.push({id:Date.now().toString(),nome:nome,nasc:document.getElementById('nc-nasc').value,tel:document.getElementById('nc-tel').value,obs:document.getElementById('nc-obs').value});notif('Cliente cadastrado!');}saveState();document.getElementById('modal-cliente').style.display='none';renderSidebarClientes();renderClientes();}
+function renderSidebarClientes(){var list=document.getElementById('client-list');list.innerHTML='';state.clientes.forEach(function(c){var d=document.createElement('div');d.className='client-item'+(state.clienteAtivo&&state.clienteAtivo.id===c.id?' active':'');d.innerHTML='<span class="client-dot"></span>'+c.nome;d.onclick=function(){selectClientePorId(c.id);};list.appendChild(d);});}
+function selectClientePorId(id){var c=state.clientes.find(function(x){return x.id===id;});if(c)selectCliente(c);}
+function selectCliente(c){state.clienteAtivo=c;renderSidebarClientes();document.getElementById('cal-client-name').textContent=c.nome;document.getElementById('rel-client-name').textContent=c.nome;document.getElementById('btn-ia').style.display='block';document.getElementById('btn-pdf').style.display='block';document.getElementById('btn-pdf-rel').style.display='block';showView('calendario');}
+function renderClientes(){var busca=(document.getElementById('busca-cliente')||{}).value||'';var grid=document.getElementById('clients-grid');var lista=state.clientes.filter(function(c){return !busca||c.nome.toLowerCase().includes(busca.toLowerCase());});if(!lista.length){grid.innerHTML='<div class="empty-state" style="grid-column:1/-1"><h3>'+(busca?'Nenhum cliente encontrado':'Nenhum cliente ainda')+'</h3><p>'+(busca?'Tente outro nome':'Clique em + Novo cliente para comecar')+'</p></div>';return;}grid.innerHTML='';lista.forEach(function(c){var qt=state.transitos.filter(function(t){return t.clienteId===c.id;}).length;var card=document.createElement('div');card.className='client-card';var info=document.createElement('div');info.style.cursor='pointer';info.innerHTML='<h3>'+c.nome+'</h3><p>'+(c.nasc?'Nasc: '+formatDate(c.nasc):'')+'</p><span class="badge">'+qt+' evento'+(qt!==1?'s':'')+'</span>';info.onclick=function(){selectClientePorId(c.id);};var acoes=document.createElement('div');acoes.className='client-card-actions';var btnEd=document.createElement('button');btnEd.className='btn-edit';btnEd.textContent='Editar';btnEd.onclick=function(e){e.stopPropagation();editarCliente(c.id);};var btnEx=document.createElement('button');btnEx.className='btn-danger';btnEx.textContent='Excluir';btnEx.onclick=function(e){e.stopPropagation();excluirCliente(c.id);};acoes.appendChild(btnEd);acoes.appendChild(btnEx);card.appendChild(info);card.appendChild(acoes);grid.appendChild(card);});}
+function renderFormClientes(){var sel=document.getElementById('f-cliente');sel.innerHTML=state.clientes.length?state.clientes.map(function(c){return '<option value="'+c.id+'">'+c.nome+'</option>';}).join(''):'<option>-- Nenhum cliente --</option>';if(state.clienteAtivo)sel.value=state.clienteAtivo.id;var dataEl=document.getElementById('f-data');if(!dataEl.value)dataEl.value=new Date().toISOString().split('T')[0];}
+function cancelarEdicaoEvento(){document.getElementById('f-editing-id').value='';document.getElementById('cadastro-title').textContent='Cadastrar Evento';document.getElementById('cadastro-subtitle').textContent='Adicionar novo evento ao calendario';document.getElementById('btn-salvar-evento').textContent='Salvar Evento';document.getElementById('btn-cancelar-evento').style.display='none';document.getElementById('f-descricao').value='';document.getElementById('f-dataforte').checked=false;document.getElementById('f-polaridade').value='';['pos','neg','neu'].forEach(function(c){document.getElementById('pol-'+c).classList.remove('pos','neg','neu');});document.getElementById('ia-sugestao-box').style.display='none';}
+function editarEvento(id){var ev=state.transitos.find(function(t){return t.id===id;});if(!ev)return;renderFormClientes();document.getElementById('f-editing-id').value=id;document.getElementById('f-cliente').value=ev.clienteId||'';document.getElementById('f-data').value=ev.data||'';document.getElementById('f-tipo').value=ev.tipo||'Transito';document.getElementById('f-fase').value=ev.fase||'';document.getElementById('f-planeta1').value=ev.planeta1||'';document.getElementById('f-p1-rege').value=ev.p1rege||'';document.getElementById('f-p1-casa').value=ev.p1casa||'';document.getElementById('f-aspecto').value=ev.aspecto||'';document.getElementById('f-planeta2').value=ev.planeta2||'';document.getElementById('f-p2-rege').value=ev.p2rege||'';document.getElementById('f-p2-casa').value=ev.p2casa||'';document.getElementById('f-tema').value=ev.tema||'';document.getElementById('f-dataforte').checked=!!ev.dataForte;document.getElementById('f-descricao').value=ev.descricao||'';if(ev.polaridade)setPolaridade(ev.polaridade);document.getElementById('cadastro-title').textContent='Editar Evento';document.getElementById('cadastro-subtitle').textContent='Alterando evento existente';document.getElementById('btn-salvar-evento').textContent='Atualizar Evento';document.getElementById('btn-cancelar-evento').style.display='inline-block';document.getElementById('ia-sugestao-box').style.display='none';showView('cadastro');}
+function excluirEvento(id){if(!confirm('Excluir este evento? Esta acao nao pode ser desfeita.'))return;state.transitos=state.transitos.filter(function(t){return t.id!==id;});saveState();renderRelatorios();notif('Evento excluido.','vermelho');}
+function salvarTransito(){var clienteId=document.getElementById('f-cliente').value;var descricao=document.getElementById('f-descricao').value.trim();if(!clienteId||!descricao){alert('Preencha cliente e descricao');return;}var pol=document.getElementById('f-polaridade').value;if(!pol){alert('Selecione a polaridade do evento');return;}var editId=document.getElementById('f-editing-id').value;var evData={clienteId:clienteId,data:document.getElementById('f-data').value,planeta1:document.getElementById('f-planeta1').value,p1rege:document.getElementById('f-p1-rege').value,p1casa:document.getElementById('f-p1-casa').value,aspecto:document.getElementById('f-aspecto').value,planeta2:document.getElementById('f-planeta2').value,p2rege:document.getElementById('f-p2-rege').value,p2casa:document.getElementById('f-p2-casa').value,tipo:document.getElementById('f-tipo').value,fase:document.getElementById('f-fase').value,tema:document.getElementById('f-tema').value,polaridade:pol,descricao:descricao,dataForte:document.getElementById('f-dataforte').checked};if(editId){var idx=state.transitos.findIndex(function(t){return t.id===editId;});if(idx>=0){evData.id=editId;state.transitos[idx]=evData;}notif('Evento atualizado!');cancelarEdicaoEvento();}else{evData.id=Date.now().toString();state.transitos.push(evData);document.getElementById('f-descricao').value='';document.getElementById('f-dataforte').checked=false;document.getElementById('f-polaridade').value='';['pos','neg','neu'].forEach(function(c){document.getElementById('pol-'+c).classList.remove('pos','neg','neu');});document.getElementById('ia-sugestao-box').style.display='none';notif('Evento salvo com sucesso!');}saveState();}
+async function sugerirTextoIA(){var p1=document.getElementById('f-planeta1').value,asp=document.getElementById('f-aspecto').value,p2=document.getElementById('f-planeta2').value;if(!p1||!asp||!p2){alert('Selecione Planeta 1, Aspecto e Planeta 2 primeiro.');return;}var apiKey=getApiKey();if(!apiKey){alert('Configure sua chave de API em Configuracoes IA para usar esta funcao.');showView('config');return;}var p1r=document.getElementById('f-p1-rege').value,p1c=document.getElementById('f-p1-casa').value,p2r=document.getElementById('f-p2-rege').value,p2c=document.getElementById('f-p2-casa').value,tipo=document.getElementById('f-tipo').value,fase=document.getElementById('f-fase').value,pol=document.getElementById('f-polaridade').value||'neutro',tema=document.getElementById('f-tema').value;var box=document.getElementById('ia-sugestao-box'),txt=document.getElementById('ia-sugestao-texto');box.style.display='block';txt.value='Gerando sugestao, aguarde...';var sys=buildSystemPrompt();var userMsg='Escreva uma interpretacao astrologica seguindo TODAS as regras para:\n\nTipo: '+tipo+'\nAspecto: '+p1+' '+asp+' '+p2+'\n'+(p1r?p1+' rege a '+p1r+(p1c?' e esta na '+p1c:'')+'.\n':'')+(p2r?p2+' rege a '+p2r+(p2c?' e esta na '+p2c:'')+'.\n':'')+'Fase: '+(fase||'nao informada')+'\nPolaridade: '+pol+'\nTema: '+(tema||'Geral')+'\n\nUsar estrutura: Planeta I -> Planeta II -> Sintese integrativa. Escrever apenas o texto, sem titulos de secao.';try{var r=await fetch('https://api.anthropic.com/v1/messages',{method:'POST',headers:{'Content-Type':'application/json','x-api-key':apiKey,'anthropic-version':'2023-06-01','anthropic-dangerous-direct-browser-inaccessible':'true'},body:JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:600,system:sys,messages:[{role:'user',content:userMsg}]})});var data=await r.json();if(data.error){txt.value='Erro: '+data.error.message;return;}txt.value=data.content&&data.content[0]?data.content[0].text:'Erro ao gerar.';}catch(e){txt.value='Erro na conexao. Verifique sua internet e a chave de API.';}}
+function usarSugestao(){document.getElementById('f-descricao').value=document.getElementById('ia-sugestao-texto').value;document.getElementById('ia-sugestao-box').style.display='none';}
+async function gerarTextoIA(){if(!state.clienteAtivo){alert('Selecione um cliente primeiro');return;}var apiKey=getApiKey();if(!apiKey){alert('Configure sua chave de API.');showView('config');return;}var fortes=state.transitos.filter(function(t){return t.clienteId===state.clienteAtivo.id&&t.dataForte&&t.descricao;});if(!fortes.length){alert('Nenhum evento com Data Forte marcado.');return;}var panel=document.getElementById('ai-panel'),output=document.getElementById('ai-output');panel.style.display='block';panel.scrollIntoView({behavior:'smooth'});output.innerHTML='<span style="color:var(--muted)"><span class="loader"></span> Organizando com IA...</span>';var temas={};fortes.forEach(function(t){var key=t.tema||'Geral';if(!temas[key])temas[key]=[];temas[key].push('['+(t.polaridade||'neutro')+'] '+(t.tipo?'['+t.tipo+'] ':'')+( t.planeta1||'')+' '+(t.aspecto||'')+' '+(t.planeta2||'')+(t.p1rege?' ('+t.planeta1+' rege '+t.p1rege+' na '+t.p1casa+')':'')+(t.p2rege?' ('+t.planeta2+' rege '+t.p2rege+' na '+t.p2casa+')':'')+ ': '+t.descricao);});var lista=Object.entries(temas).map(function(entry){return 'TEMA: '+entry[0]+'\n'+entry[1].map(function(t,i){return (i+1)+'. '+t;}).join('\n');}).join('\n\n---\n\n');var sys=buildSystemPrompt();try{var r=await fetch('https://api.anthropic.com/v1/messages',{method:'POST',headers:{'Content-Type':'application/json','x-api-key':apiKey,'anthropic-version':'2023-06-01','anthropic-dangerous-direct-browser-inaccessible':'true'},body:JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:1500,system:sys,messages:[{role:'user',content:'Reescreva as interpretacoes em texto corrido por tema, seguindo TODAS as regras. Use a polaridade para dar o tom. Mantenha titulos por tema.\n\n'+lista}]})});var data=await r.json();if(data.error){output.innerHTML='<p style="color:#C0392B">Erro: '+data.error.message+'</p>';return;}var texto=data.content&&data.content[0]?data.content[0].text:'Erro ao gerar texto.';var sections=texto.split(/\n(?=[A-Z])/);output.innerHTML=sections.map(function(s){var lines=s.trim().split('\n');var title=lines[0];var body=lines.slice(1).join('\n').trim();if(!body)return '<div class="ai-text" style="margin-bottom:14px">'+title+'</div>';return '<div class="ai-section"><div class="ai-section-title">'+title+'</div><div class="ai-text">'+body+'</div></div>';}).join('');}catch(e){output.innerHTML='<p style="color:#C0392B">Erro na conexao.</p>';}}
+function copiarTexto(){navigator.clipboard.writeText(document.getElementById('ai-output').innerText).then(function(){notif('Texto copiado!');});}
+function gerarPDF(){if(!state.clienteAtivo){alert('Selecione um cliente primeiro');return;}var evs=state.transitos.filter(function(t){return t.clienteId===state.clienteAtivo.id;}).sort(function(a,b){return (a.data||'').localeCompare(b.data||'');});if(!evs.length){alert('Nenhum evento cadastrado.');return;}var c=state.clienteAtivo;var corPol={positivo:'#1A6B3A',negativo:'#B82020',neutro:'#1A4A8B'},bgPol={positivo:'#E8F5EE',negativo:'#FDEAEA',neutro:'#EAF0FB'},labelPol={positivo:'Positivo',negativo:'Negativo',neutro:'Neutro'};var rows=evs.map(function(ev){var pol=ev.polaridade||'neutro',cor=corPol[pol],bg=bgPol[pol];var casas=[ev.p1rege?ev.planeta1+' rege '+ev.p1rege+(ev.p1casa?' na '+ev.p1casa:''):'',ev.p2rege?ev.planeta2+' rege '+ev.p2rege+(ev.p2casa?' na '+ev.p2casa:''):''].filter(Boolean).join(' | ');return '<div style="margin-bottom:18px;padding:14px 16px;border-radius:8px;border-left:4px solid '+cor+';background:'+bg+';page-break-inside:avoid"><div style="display:flex;justify-content:space-between;margin-bottom:6px"><div><span style="font-size:13px;font-weight:600;color:'+cor+'">'+formatDate(ev.data)+'</span>'+(ev.dataForte?'<span style="margin-left:8px;font-size:10px;padding:2px 6px;border-radius:10px;background:#F5E6B0;color:#7A6010">Data Forte</span>':'')+'</div><span style="font-size:10px;padding:2px 8px;border-radius:10px;background:'+bg+';color:'+cor+';border:1px solid '+cor+'">'+(labelPol[pol]||'Neutro')+'</span></div><div style="font-size:16px;font-weight:500;color:#1A1408;margin-bottom:4px">'+(ev.planeta1||'')+' '+(ev.aspecto||'')+' '+(ev.planeta2||'')+'</div>'+(casas?'<div style="font-size:11px;color:#7A7060;margin-bottom:6px">'+casas+'</div>':'')+'<div style="display:flex;gap:12px;margin-bottom:8px">'+(ev.tipo?'<span style="font-size:10px;color:#7A7060">'+ev.tipo+'</span>':'')+(ev.fase?'<span style="font-size:10px;color:#7A7060">'+ev.fase+'</span>':'')+(ev.tema?'<span style="font-size:10px;color:#8B6914;font-weight:500">'+ev.tema+'</span>':'')+'</div><div style="font-size:13px;color:#2C2416;line-height:1.7;font-style:italic">'+ev.descricao+'</div></div>';}).join('');var html='<!DOCTYPE html><html><head><meta charset="UTF-8"><style>*{box-sizing:border-box;margin:0;padding:0}body{font-family:Georgia,serif;color:#2C2416;background:#fff;padding:40px;max-width:780px;margin:0 auto}@media print{body{padding:20px}@page{margin:2cm}}</style></head><body><div style="text-align:center;margin-bottom:36px;padding-bottom:24px;border-bottom:1px solid #DDD8CE"><div style="font-size:28px;font-weight:300;color:#8B6914;letter-spacing:2px">Astral - Mapa de Transitos</div><div style="font-size:16px;color:#7A7060;margin-top:8px">'+c.nome+'</div>'+(c.nasc?'<div style="font-size:13px;color:#7A7060;margin-top:4px">Nascimento: '+formatDate(c.nasc)+'</div>':'')+'<div style="font-size:12px;color:#7A7060;margin-top:4px">Gerado em '+new Date().toLocaleDateString('pt-BR')+'</div><div style="display:flex;justify-content:center;gap:24px;margin-top:16px;font-size:12px"><span style="color:#1A6B3A">Positivo</span><span style="color:#B82020">Negativo</span><span style="color:#1A4A8B">Neutro</span></div></div>'+rows+'<div style="text-align:center;margin-top:40px;padding-top:20px;border-top:1px solid #DDD8CE;font-size:11px;color:#7A7060">Documento gerado pelo Astral - Programa de Transitos</div></body></html>';var win=window.open('','_blank');win.document.write(html);win.document.close();setTimeout(function(){win.print();},800);}
+function formatDate(d){if(!d)return '';var p=d.split('-');return p[2]+'/'+p[1]+'/'+p[0];}
+function changeMonth(d){state.calDate=new Date(state.calDate.getFullYear(),state.calDate.getMonth()+d,1);renderCalendar();}
+function renderCalendar(){var d=state.calDate;document.getElementById('cal-month-label').textContent=MONTHS_PT[d.getMonth()]+' '+d.getFullYear();var grid=document.getElementById('cal-grid');while(grid.children.length>7)grid.removeChild(grid.lastChild);var today=new Date();var firstDay=new Date(d.getFullYear(),d.getMonth(),1).getDay();var daysInMonth=new Date(d.getFullYear(),d.getMonth()+1,0).getDate();var daysInPrev=new Date(d.getFullYear(),d.getMonth(),0).getDate();var tc=state.clienteAtivo?state.transitos.filter(function(t){return t.clienteId===state.clienteAtivo.id;}):[];function getEv(y,m,day){var ds=y+'-'+String(m+1).padStart(2,'0')+'-'+String(day).padStart(2,'0');return tc.filter(function(t){return t.data===ds;});}for(var i=0;i<firstDay;i++)grid.appendChild(makeCell(daysInPrev-firstDay+i+1,d.getFullYear(),d.getMonth()-1,true,[]));for(var day=1;day<=daysInMonth;day++){var isToday=today.getDate()===day&&today.getMonth()===d.getMonth()&&today.getFullYear()===d.getFullYear();grid.appendChild(makeCell(day,d.getFullYear(),d.getMonth(),false,getEv(d.getFullYear(),d.getMonth(),day),isToday));}var rem=(firstDay+daysInMonth)%7;if(rem>0)for(var i2=1;i2<=7-rem;i2++)grid.appendChild(makeCell(i2,d.getFullYear(),d.getMonth()+1,true,[]));}
+function makeCell(day,year,month,otherMonth,events,isToday){var cell=document.createElement('div');var hasStrong=events.some(function(e){return e.dataForte;});var dp=events.length?(events[0].polaridade||'neutro'):null;var cls='cal-cell'+(otherMonth?' other-month':'')+(isToday?' today':'');if(hasStrong)cls+=' strong-date';else if(events.length)cls+=' has-events';cell.className=cls;if(events.length&&dp){var cs={positivo:'var(--pos-border)',negativo:'var(--neg-border)',neutro:'var(--neu-border)'};var bs={positivo:'var(--pos-bg)',negativo:'var(--neg-bg)',neutro:'var(--neu-bg)'};cell.style.borderColor=cs[dp];if(hasStrong)cell.style.background=bs[dp];}var numEl=document.createElement('div');numEl.className='cal-num';numEl.textContent=day;cell.appendChild(numEl);events.slice(0,3).forEach(function(ev){var dot=document.createElement('div');var pc=polClass(ev.polaridade);dot.className='event-dot '+pc+(ev.dataForte?' strong':'');dot.textContent=(ev.planeta1||'EV').substring(0,3);cell.appendChild(dot);});if(events.length>3){var more=document.createElement('div');more.style.cssText='font-size:9px;color:var(--muted);margin-top:2px';more.textContent='+'+(events.length-3)+' mais';cell.appendChild(more);}if(events.length){(function(day,year,month,events){cell.onclick=function(){showDayModal(day,year,month,events);};})(day,year,month,events);}return cell;}
+function showDayModal(day,year,month,events){document.getElementById('modal-dia-title').textContent=day+' de '+MONTHS_PT[month]+' de '+year;document.getElementById('modal-dia-content').innerHTML=events.map(function(ev){var pc=polClass(ev.polaridade),polLabel={positivo:'Positivo',negativo:'Negativo',neutro:'Neutro'}[ev.polaridade]||'Neutro';return '<div style="padding:12px 0;border-bottom:1px solid var(--border);border-left:3px solid var(--'+pc+');padding-left:10px;margin-left:-10px"><div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px"><span style="font-size:14px;font-weight:500;color:var(--'+pc+')">'+(ev.planeta1||'')+' '+(ev.aspecto||'')+' '+(ev.planeta2||'')+'</span><div style="display:flex;gap:6px"><span class="tag tag-'+pc+'">'+polLabel+'</span>'+(ev.dataForte?'<span class="tag tag-strong">Data Forte</span>':'')+'</div></div><div style="font-size:11px;color:var(--muted);margin-bottom:4px">'+(ev.tipo||'Transito')+(ev.fase?' - '+ev.fase:'')+'</div><div style="font-size:12px;color:var(--accent);margin-bottom:6px">'+(ev.p1rege?ev.planeta1+': rege '+ev.p1rege+' na '+(ev.p1casa||'?')+' ':'')+(ev.p2rege?ev.planeta2+': rege '+ev.p2rege+' na '+(ev.p2casa||'?'):'')+'</div>'+(ev.tema?'<div style="font-size:10px;color:var(--gold);text-transform:uppercase;letter-spacing:1px;margin-bottom:6px">'+ev.tema+'</div>':'')+'<p style="font-size:13px;color:var(--'+pc+');line-height:1.6;font-style:italic">'+ev.descricao+'</p></div>';}).join('');document.getElementById('modal-dia').style.display='flex';}
+function renderRelatorios(){if(!state.clienteAtivo){document.getElementById('stat-grid').innerHTML='<div class="empty-state" style="grid-column:1/-1"><h3>Selecione um cliente</h3></div>';document.getElementById('charts-grid').innerHTML='';document.getElementById('events-list-rel').innerHTML='';return;}var evs=state.transitos.filter(function(t){return t.clienteId===state.clienteAtivo.id;});var anoSel=document.getElementById('r-ano');var anos=[...new Set(evs.map(function(t){return t.data?t.data.substring(0,4):'';}).filter(Boolean))].sort();var anoAtual=anoSel.value;anoSel.innerHTML='<option value="">Todos</option>'+anos.map(function(a){return '<option value="'+a+'" '+(a===anoAtual?'selected':'')+'>'+a+'</option>';}).join('');var fA=anoSel.value,fM=document.getElementById('r-mes').value,fT=document.getElementById('r-tipo').value,fTe=document.getElementById('r-tema').value,fP=document.getElementById('r-pol').value,fF=document.getElementById('r-forte').value;if(fA)evs=evs.filter(function(t){return t.data&&t.data.substring(0,4)===fA;});if(fM)evs=evs.filter(function(t){return t.data&&t.data.substring(5,7)===fM;});if(fT)evs=evs.filter(function(t){return t.tipo===fT;});if(fTe)evs=evs.filter(function(t){return t.tema===fTe;});if(fP)evs=evs.filter(function(t){return t.polaridade===fP;});if(fF==='forte')evs=evs.filter(function(t){return t.dataForte;});evs.sort(function(a,b){return (a.data||'').localeCompare(b.data||'');});var pos=evs.filter(function(t){return t.polaridade==='positivo';}).length,neg=evs.filter(function(t){return t.polaridade==='negativo';}).length,neu=evs.filter(function(t){return t.polaridade==='neutro';}).length,fortes=evs.filter(function(t){return t.dataForte;}).length;document.getElementById('stat-grid').innerHTML='<div class="stat-card"><div class="stat-num">'+evs.length+'</div><div class="stat-label">Total</div></div><div class="stat-card pos"><div class="stat-num">'+pos+'</div><div class="stat-label">Positivos</div></div><div class="stat-card neg"><div class="stat-num">'+neg+'</div><div class="stat-label">Negativos</div></div><div class="stat-card neu"><div class="stat-num">'+neu+'</div><div class="stat-label">Neutros</div></div><div class="stat-card"><div class="stat-num" style="color:var(--gold)">'+fortes+'</div><div class="stat-label">Datas Fortes</div></div>';document.getElementById('charts-grid').innerHTML=barChart('Por Tema',groupCount(evs,'tema','Geral'),'#8B6914')+barChart('Por Tipo',groupCount(evs,'tipo','Transito'),'#6B5EA8')+barChart('Por Mes',groupCountMes(evs),'#27704A')+barChartMulti('Por Polaridade',[['Positivo',pos],['Negativo',neg],['Neutro',neu]].filter(function(x){return x[1]>0;}),['#1A6B3A','#B82020','#1A4A8B']);if(!evs.length){document.getElementById('events-list-rel').innerHTML='<div class="no-results">Nenhum evento encontrado.</div>';return;}var listEl=document.getElementById('events-list-rel');listEl.innerHTML='<div class="events-list-header"><h3>Eventos ('+evs.length+')</h3></div>';evs.forEach(function(ev){var pc=polClass(ev.polaridade);var desc=(ev.planeta1||'')+' '+(ev.aspecto||'')+' '+(ev.planeta2||'')+(ev.descricao?' - '+ev.descricao.substring(0,35)+(ev.descricao.length>35?'...':''):'');var row=document.createElement('div');row.className='event-row '+pc;row.innerHTML='<div class="event-date">'+formatDate(ev.data)+'</div><div class="event-desc" style="color:var(--'+pc+')">'+desc+'</div><div style="font-size:11px;color:var(--muted)">'+(ev.tipo||'Transito')+'</div><div><span class="tag tag-'+pc+'" style="font-size:10px">'+(ev.polaridade||'neutro')+'</span></div><div style="font-size:10px;color:var(--muted)">'+(ev.tema||'Geral')+(ev.dataForte?' F':'')+'</div><div class="event-actions"></div>';var acoes=row.querySelector('.event-actions');var btnEd=document.createElement('button');btnEd.className='btn-edit';btnEd.textContent='Editar';btnEd.style.cssText='font-size:10px;padding:4px 8px';btnEd.onclick=function(){editarEvento(ev.id);};var btnEx=document.createElement('button');btnEx.className='btn-danger';btnEx.textContent='Excluir';btnEx.style.cssText='font-size:10px;padding:4px 8px';btnEx.onclick=function(){excluirEvento(ev.id);};acoes.appendChild(btnEd);acoes.appendChild(btnEx);listEl.appendChild(row);});}
+function groupCount(evs,field,fallback){var map={};evs.forEach(function(e){var k=e[field]||fallback;map[k]=(map[k]||0)+1;});return Object.entries(map).sort(function(a,b){return b[1]-a[1];});}
+function groupCountMes(evs){var map={};evs.forEach(function(e){if(!e.data)return;var m=parseInt(e.data.substring(5,7),10);var k=MONTHS_PT[m-1].substring(0,3);map[k]=(map[k]||0)+1;});var order=['Jan','Fev','Mar','Abr','Mai','Jun','Jul','Ago','Set','Out','Nov','Dez'];return Object.entries(map).sort(function(a,b){return order.indexOf(a[0])-order.indexOf(b[0]);});}
+function barChart(title,data,color){if(!data.length)return '<div class="chart-card"><div class="chart-title">'+title+'</div><div style="color:var(--muted);font-size:12px">Sem dados</div></div>';var max=Math.max.apply(null,data.map(function(d){return d[1];}));return '<div class="chart-card"><div class="chart-title">'+title+'</div>'+data.map(function(item){return '<div class="bar-row"><div class="bar-label">'+item[0]+'</div><div class="bar-track"><div class="bar-fill" style="width:'+Math.round((item[1]/max)*100)+'%;background:'+color+'"></div></div><div class="bar-val">'+item[1]+'</div></div>';}).join('')+'</div>';}
+function barChartMulti(title,data,colors){if(!data.length)return '<div class="chart-card"><div class="chart-title">'+title+'</div><div style="color:var(--muted);font-size:12px">Sem dados</div></div>';var max=Math.max.apply(null,data.map(function(d){return d[1];}));return '<div class="chart-card"><div class="chart-title">'+title+'</div>'+data.map(function(item,i){return '<div class="bar-row"><div class="bar-label">'+item[0]+'</div><div class="bar-track"><div class="bar-fill" style="width:'+Math.round((item[1]/max)*100)+'%;background:'+colors[i]+'"></div></div><div class="bar-val">'+item[1]+'</div></div>';}).join('')+'</div>';}
+function renderDados(){var totalCli=state.clientes.length,totalEv=state.transitos.length;var pos=state.transitos.filter(function(t){return t.polaridade==='positivo';}).length,neg=state.transitos.filter(function(t){return t.polaridade==='negativo';}).length,neu=state.transitos.filter(function(t){return t.polaridade==='neutro';}).length;document.getElementById('stats-gerais').innerHTML='<strong>'+totalCli+'</strong> cliente'+(totalCli!==1?'s':'')+' cadastrado'+(totalCli!==1?'s':'')+'<br><strong>'+totalEv+'</strong> evento'+(totalEv!==1?'s':'')+' no total<br><span style="color:var(--pos)">'+pos+' positivos</span> &bull; <span style="color:var(--neg)">'+neg+' negativos</span> &bull; <span style="color:var(--neu)">'+neu+' neutros</span>';}
+function exportarBackup(){var backup={versao:'1.0',data:new Date().toISOString(),clientes:state.clientes,transitos:state.transitos,regras:state.regras,config:state.config};var json=JSON.stringify(backup,null,2);var blob=new Blob([json],{type:'application/json'});var url=URL.createObjectURL(blob);var a=document.createElement('a');a.href=url;a.download='astral_backup_'+new Date().toISOString().slice(0,10)+'.json';a.click();URL.revokeObjectURL(url);notif('Backup exportado com sucesso!');}
+function importarBackup(event){var file=event.target.files[0];if(!file)return;if(!confirm('Importar backup? Os dados atuais serao substituidos.'))return;var reader=new FileReader();reader.onload=function(e){try{var backup=JSON.parse(e.target.result);if(!backup.clientes||!backup.transitos)throw new Error('Arquivo invalido');state.clientes=backup.clientes||[];state.transitos=backup.transitos||[];state.regras=backup.regras||REGRAS_FIXAS.slice();state.config=backup.config||{tom:'tecnico',tamanho:'medio',apresentacao:''};state.clienteAtivo=null;saveState();renderSidebarClientes();renderDados();notif('Backup importado com sucesso!');}catch(err){alert('Erro ao importar: arquivo invalido ou corrompido.');}event.target.value='';};reader.readAsText(file);}
+function apagarTudo(){if(!confirm('ATENCAO: Isso vai apagar TODOS os clientes, eventos e configuracoes. Esta acao nao pode ser desfeita. Tem certeza?'))return;if(!confirm('Confirmar exclusao de todos os dados?'))return;state.clientes=[];state.transitos=[];state.clienteAtivo=null;state.regras=REGRAS_FIXAS.slice();state.config={tom:'tecnico',tamanho:'medio',apresentacao:''};saveState();renderSidebarClientes();renderDados();notif('Todos os dados foram apagados.','vermelho');}
+var today=new Date();document.getElementById('f-data').value=today.toISOString().split('T')[0];renderSidebarClientes();renderCalendar();
+</script></body></html>
